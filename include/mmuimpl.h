@@ -12,7 +12,7 @@
 
 namespace goteborg {
 
-class MMUImpl : MMU {
+class MMUImpl : public MMU {
 public:
     MMUImpl();
     virtual ~MMUImpl();

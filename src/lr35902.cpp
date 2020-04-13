@@ -9,6 +9,6 @@
 
 using namespace goteborg;
 
-LR35902::LR35902() : r() {
+LR35902::LR35902(MMU& mmu) : r(), mmu(mmu) {
 
 }

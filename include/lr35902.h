@@ -9,6 +9,7 @@
 #define LR35902_H
 
 #include "registers.h"
+#include "mmu.h"
 
 namespace goteborg {
 
@@ -27,10 +28,15 @@ const u64 kColorClockRate = 8'388'608;
  */
 class LR35902 {
 public:
-    LR35902();
+    LR35902(MMU& mmu);
 
 private:
     Registers r;
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wunused-private-field"
+    MMU& mmu;
+    #pragma GCC diagnostic pop
 
 };
 

@@ -36,5 +36,9 @@ int main(int argc, char** argv) {
     }
     bios.close();
 
+    for (;;) {
+        cpu.cycle();
+    }
+
     return 0;
 }

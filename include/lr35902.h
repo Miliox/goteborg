@@ -11,6 +11,9 @@
 #include "registers.h"
 #include "mmu.h"
 
+#include <iomanip>
+#include <sstream>
+
 namespace goteborg {
 
 const u64 kClockRate = 4'194'304;
@@ -30,6 +33,11 @@ class LR35902 {
 public:
     LR35902(MMU& mmu);
 
+    /**
+     * Run fetch-decode-execute cycle
+     */
+    u8 cycle();
+
 private:
     Registers r;
 
@@ -38,6 +46,20 @@ private:
     MMU& mmu;
     #pragma GCC diagnostic pop
 
+    std::vector<u8 (LR35902::*)()> iset;
+    std::vector<u8 (LR35902::*)()> cb_iset;
+
+    u8 not_implemented_error() {
+        auto opcode = mmu.read(r.pc);
+
+        std::stringstream ss;
+        ss << "Instruction not supported: ";
+        ss << std::uppercase << std::hex << std::setfill('0') << std::setw(2);
+        ss << static_cast<int>(opcode);
+
+        throw std::runtime_error(ss.str());
+        return 0;
+    }
 };
 
 } // namespace goteborg

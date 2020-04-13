@@ -14,6 +14,7 @@ conan_basic_setup()
 set(SOURCE
     ${SOURCE}
     src/lr35902.cpp
+    src/mmuimpl.cpp
 )
 
 add_executable(${PROJECT_NAME}
@@ -30,7 +31,11 @@ set(TEST
     ${SOURCE}
 )
 
-add_executable(${PROJECT_NAME}-test ${TEST} test/main.cpp)
+add_executable(${PROJECT_NAME}-test
+    ${TEST}
+    test/main.cpp
+    test/mmuimpl-tests.cpp
+)
 
 target_include_directories(${PROJECT_NAME}-test
     PUBLIC include ${CONAN_INCLUDE_DIRS})

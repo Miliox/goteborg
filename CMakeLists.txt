@@ -13,6 +13,7 @@ conan_basic_setup()
 
 set(SOURCE
     ${SOURCE}
+    src/lr35902.cpp
 )
 
 add_executable(${PROJECT_NAME}

@@ -17,10 +17,34 @@ set(SOURCE
     src/mmuimpl.cpp
 )
 
-add_executable(${PROJECT_NAME}
-    ${SOURCE}
-    src/main.cpp
-)
+if (APPLE)
+    # Bundled is necessary to handle Retina Displays
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+        ${SOURCE}
+        src/main.cpp
+    )
+
+    install(TARGETS ${PROJECT_NAME}
+        BUNDLE DESTINATION . COMPONENT Runtime
+        RUNTIME DESTINATION bin COMPONENT Runtime
+    )
+
+    set(APPS "\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.app")
+
+    # Directories to look for dependencies
+    set(DIRS ${CMAKE_BINARY_DIR})
+
+    install(CODE "include(BundleUtilities)
+        fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+
+    set(CPACK_GENERATOR "DRAGNDROP")
+    include(CPack)
+else()
+    add_executable(${PROJECT_NAME}
+        ${SOURCE}
+        src/main.cpp
+    )
+endif()
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC include ${CONAN_INCLUDE_DIRS})

@@ -1,5 +1,6 @@
 [requires]
 catch2/2.11.3
+imgui-sfml/2.1@bincrafters/stable
 
 [generators]
 cmake

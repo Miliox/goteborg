@@ -1,5 +1,6 @@
 *~
 *.bak
 *.exe
+.DS_Store
 build/
 

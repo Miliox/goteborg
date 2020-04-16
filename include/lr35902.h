@@ -47,6 +47,8 @@ private:
     std::vector<std::function<ticks()>> iset;
     std::vector<std::function<ticks()>> cb_iset;
 
+    u8  next8();
+    u16 next16();
 };
 
 } // namespace goteborg

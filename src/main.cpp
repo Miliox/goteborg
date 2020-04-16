@@ -7,6 +7,7 @@
 
 #include "main.h"
 #include "emulator.h"
+#include "alu.h"
 
 #include <fstream>
 #include <iostream>
@@ -58,9 +59,20 @@ int main(int argc, char** argv) {
         ImGui::Begin("Debugger");
 
         ImGui::BeginChild("Registers");
-        ImGui::Text("A  F  B  C  D  E  H  L   AF   BC   DE   HL   SP   PC");
-        ImGui::Text("%02X %02X %02X %02X %02X %02X %02X %02X %04x %04x %04x %04x %04x %04x",
-                    r.a, r.f, r.b, r.c, r.d, r.e, r.h, r.l, r.af, r.bc, r.de, r.hl, r.sp, r.pc);
+
+        ImGui::Text("PC   FLAGS    A  F  B  C  D  E  H  L  AF   BC   DE   HL   SP");
+        //           0000 ZNHC---- 00 00 00 00 00 00 00 00 0000 0000 0000 0000 0000
+        ImGui::Text("%04x %c%c%c%c%c%c%c%c %02X %02X %02X %02X %02X %02X %02X %02X %04x %04x %04x %04x %04x",
+                    r.pc,
+                    (r.f & 0b1000'0000) ? 'Z' : '-',
+                    (r.f & 0b0100'0000) ? 'N' : '-',
+                    (r.f & 0b0010'0000) ? 'H' : '-',
+                    (r.f & 0b0001'0000) ? 'C' : '-',
+                    (r.f & 0b0000'1000) ? '1' : '-',
+                    (r.f & 0b0000'0100) ? '1' : '-',
+                    (r.f & 0b0000'0010) ? '1' : '-',
+                    (r.f & 0b0000'0001) ? '1' : '-',
+                    r.a, r.f, r.b, r.c, r.d, r.e, r.h, r.l, r.af, r.bc, r.de, r.hl, r.sp);
 
         ImGui::EndChild();
         ImGui::End();

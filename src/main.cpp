@@ -6,11 +6,12 @@
  */
 
 #include "main.h"
-#include "mmuimpl.h"
-#include "lr35902.h"
+#include "emulator.h"
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <unistd.h>
 
 #include <imgui.h>
@@ -29,29 +30,12 @@ void setCurrentWorkingDirectory(const char* appName);
 int main(int argc, char** argv) {
     setCurrentWorkingDirectory(argv[0]);
 
-    MMUImpl mmu;
-    LR35902 cpu(mmu);
-
-    {
-        sf::FileInputStream bios;
-        if (!bios.open("bios.bin")) {
-            std::cerr << "error: cannot load bios" << std::endl;
-            return -1;
-        }
-
-        buffer data(bios.getSize(), 0xff);
-        bios.read(reinterpret_cast<void*>(&data.front()), data.size());
-        for (size_t addr = 0; addr < data.size(); addr++) {
-            mmu.write(addr, data.at(addr));
-        }
-    }
-
     sf::RenderWindow window(sf::VideoMode(640, 480), "Goteborg");
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
 
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    Emulator emulator;
+    emulator.reset();
 
     sf::Clock deltaClock;
     while (window.isOpen()) {
@@ -59,17 +43,29 @@ int main(int argc, char** argv) {
         while (window.pollEvent(event)) {
             ImGui::SFML::ProcessEvent(event);
 
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+                emulator.step();
+            }
+
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
         }
 
-        // TODO: Emulator Loop
-
         ImGui::SFML::Update(window, deltaClock.restart());
 
+        auto r = emulator.getCPU().getRegisters();
+        ImGui::Begin("Debugger");
+
+        ImGui::BeginChild("Registers");
+        ImGui::Text("A  F  B  C  D  E  H  L   AF   BC   DE   HL   SP   PC");
+        ImGui::Text("%02X %02X %02X %02X %02X %02X %02X %02X %04x %04x %04x %04x %04x %04x",
+                    r.a, r.f, r.b, r.c, r.d, r.e, r.h, r.l, r.af, r.bc, r.de, r.hl, r.sp, r.pc);
+
+        ImGui::EndChild();
+        ImGui::End();
+
         window.clear();
-        window.draw(shape);
         ImGui::SFML::Render(window);
         window.display();
     }

@@ -22,6 +22,7 @@ typedef std::int32_t  s32;
 typedef std::int64_t  s64;
 
 typedef std::uint16_t addr;
+typedef std::uint64_t ticks;
 
 typedef std::vector<u8> buffer;
 

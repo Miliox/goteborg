@@ -22,6 +22,8 @@ public:
     void transfer(addr dst, addr src) override;
     void write(addr dst, u8 value) override;
 
+    void write(addr dst, const buffer& data);
+
 private:
     /**
      * Simple flat storage layout

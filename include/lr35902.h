@@ -33,33 +33,20 @@ class LR35902 {
 public:
     LR35902(MMU& mmu);
 
+    Registers getRegisters();
+
     /**
      * Run fetch-decode-execute cycle
      */
-    u8 cycle();
+    ticks cycle();
 
 private:
     Registers r;
-
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wunused-private-field"
     MMU& mmu;
-    #pragma GCC diagnostic pop
 
-    std::vector<u8 (LR35902::*)()> iset;
-    std::vector<u8 (LR35902::*)()> cb_iset;
+    std::vector<std::function<ticks()>> iset;
+    std::vector<std::function<ticks()>> cb_iset;
 
-    u8 not_implemented_error() {
-        auto opcode = mmu.read(r.pc);
-
-        std::stringstream ss;
-        ss << "Instruction not supported: ";
-        ss << std::uppercase << std::hex << std::setfill('0') << std::setw(2);
-        ss << static_cast<int>(opcode);
-
-        throw std::runtime_error(ss.str());
-        return 0;
-    }
 };
 
 } // namespace goteborg

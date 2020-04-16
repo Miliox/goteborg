@@ -7,6 +7,8 @@
 
 #include "mmuimpl.h"
 
+#include <algorithm>
+
 using namespace goteborg;
 
 
@@ -69,4 +71,11 @@ void MMUImpl::transfer(addr dst, addr src) {
 void MMUImpl::write(addr dst, u8 value) {
     dst = resolve(dst);
     mem.at(dst) = value;
+}
+
+void MMUImpl::write(addr dst, const buffer& data) {
+    for (addr a = 0; a < data.size(); a++) {
+        auto aux = resolve(dst + a);
+        mem.at(aux) = data.at(a);
+    }
 }

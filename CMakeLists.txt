@@ -15,6 +15,7 @@ set(SOURCE
     ${SOURCE}
     src/lr35902.cpp
     src/mmuimpl.cpp
+    src/emulator.cpp
 )
 
 file(GLOB_RECURSE RES_SOURCES "res/*")

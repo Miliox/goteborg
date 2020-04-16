@@ -17,12 +17,25 @@ set(SOURCE
     src/mmuimpl.cpp
 )
 
+file(GLOB_RECURSE RES_SOURCES "res/*")
+
 if (APPLE)
     # Bundled is necessary to handle Retina Displays
     add_executable(${PROJECT_NAME} MACOSX_BUNDLE
         ${SOURCE}
         src/main.cpp
+        ${RES_SOURCES}
     )
+
+    #individually set the file's path properties
+    foreach(RES_FILE ${RES_SOURCES})
+        #Get the relative path from the data-folder to the particular file
+        file(RELATIVE_PATH RES_PATH "${PROJECT_SOURCE_DIR}/res/" ${RES_FILE})
+
+        #Set it's location inside the app package (under Resources)
+        set_property(SOURCE ${RES_FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/")
+
+    endforeach(RES_FILE)
 
     install(TARGETS ${PROJECT_NAME}
         BUNDLE DESTINATION . COMPONENT Runtime

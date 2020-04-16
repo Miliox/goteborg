@@ -11,40 +11,40 @@
 
 #include <fstream>
 #include <iostream>
+#include <unistd.h>
 
 #include <imgui.h>
 #include <imgui-SFML.h>
 
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
+#include <SFML/System/FileInputStream.hpp>
 #include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
 
 using namespace goteborg;
 
+void setCurrentWorkingDirectory(const char* appName);
+
 int main(int argc, char** argv) {
+    setCurrentWorkingDirectory(argv[0]);
+
     MMUImpl mmu;
     LR35902 cpu(mmu);
 
-    /* TODO: Bundle BIOS Resource
-    std::fstream bios;
-    bios.open("res/bios.bin", std::fstream::in | std::fstream::binary);
+    {
+        sf::FileInputStream bios;
+        if (!bios.open("bios.bin")) {
+            std::cerr << "error: cannot load bios" << std::endl;
+            return -1;
+        }
 
-    if (!bios.is_open()) {
-        std::cerr << "error: cannot load bios" << std::endl;
-        return -1;
+        buffer data(bios.getSize(), 0xff);
+        bios.read(reinterpret_cast<void*>(&data.front()), data.size());
+        for (size_t addr = 0; addr < data.size(); addr++) {
+            mmu.write(addr, data.at(addr));
+        }
     }
-
-    // Load bios
-    addr a = 0;
-    auto b = bios.get();
-    while (!bios.eof()) {
-        mmu.write(a, b);
-        b = bios.get();
-        a += 1;
-    }
-    bios.close();
-    */
 
     sf::RenderWindow window(sf::VideoMode(640, 480), "Goteborg");
     window.setFramerateLimit(60);
@@ -68,10 +68,6 @@ int main(int argc, char** argv) {
 
         ImGui::SFML::Update(window, deltaClock.restart());
 
-        ImGui::Begin("Hello, world!");
-        ImGui::Button("Look at this pretty button");
-        ImGui::End();
-
         window.clear();
         window.draw(shape);
         ImGui::SFML::Render(window);
@@ -80,4 +76,12 @@ int main(int argc, char** argv) {
 
     ImGui::SFML::Shutdown();
     return 0;
+}
+
+void setCurrentWorkingDirectory(const char* appName) {
+    std::string workdir(appName);
+    workdir = workdir.substr(0, workdir.rfind('/'));
+    workdir = workdir.substr(0, workdir.rfind('/'));
+    workdir += "/Resources";
+    chdir(workdir.c_str());
 }

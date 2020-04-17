@@ -13,6 +13,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <inttypes.h>
 #include <unistd.h>
 
 #include <imgui.h>
@@ -38,6 +39,8 @@ int main(int argc, char** argv) {
     Emulator emulator;
     emulator.reset();
 
+    ticks elapsedTicks = 0;
+
     sf::Clock deltaClock;
     while (window.isOpen()) {
         sf::Event event;
@@ -45,7 +48,7 @@ int main(int argc, char** argv) {
             ImGui::SFML::ProcessEvent(event);
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
-                emulator.step();
+                elapsedTicks += emulator.step();
             }
 
             if (event.type == sf::Event::Closed) {
@@ -55,10 +58,8 @@ int main(int argc, char** argv) {
 
         ImGui::SFML::Update(window, deltaClock.restart());
 
-        auto r = emulator.getCPU().getRegisters();
+        auto& r = emulator.getCPU().regs;
         ImGui::Begin("Debugger");
-
-        ImGui::BeginChild("Registers");
 
         ImGui::Text("PC   FLAGS    A  F  B  C  D  E  H  L  AF   BC   DE   HL   SP");
         //           0000 ZNHC---- 00 00 00 00 00 00 00 00 0000 0000 0000 0000 0000
@@ -74,7 +75,19 @@ int main(int argc, char** argv) {
                     (r.f & 0b0000'0001) ? '1' : '-',
                     r.a, r.f, r.b, r.c, r.d, r.e, r.h, r.l, r.af, r.bc, r.de, r.hl, r.sp);
 
-        ImGui::EndChild();
+        ImGui::Text("Next: %02X %02X %02X %02X %02X %02X %02X %02X",
+                    emulator.getMMU().read(r.pc),
+                    emulator.getMMU().read(r.pc + 1),
+                    emulator.getMMU().read(r.pc + 2),
+                    emulator.getMMU().read(r.pc + 3),
+                    emulator.getMMU().read(r.pc + 4),
+                    emulator.getMMU().read(r.pc + 5),
+                    emulator.getMMU().read(r.pc + 6),
+                    emulator.getMMU().read(r.pc + 7)
+        );
+
+        ImGui::Text("Ticks: %017" PRIu64, elapsedTicks);
+
         ImGui::End();
 
         window.clear();

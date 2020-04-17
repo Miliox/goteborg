@@ -8,17 +8,20 @@
 #ifndef LR35902_H
 #define LR35902_H
 
+#include "common.h"
 #include "registers.h"
-#include "mmu.h"
 
 #include <iomanip>
 #include <sstream>
 
 namespace goteborg {
 
-const u64 kClockRate = 4'194'304;
-const u64 kSuperClockRate = 4'295'454;
-const u64 kColorClockRate = 8'388'608;
+class MMU;
+class Registers;
+
+const u64 kClockRate = 4'194'304;       // Classic Gameboy
+const u64 kSuperClockRate = 4'295'454;  // Super Gameboy
+const u64 kColorClockRate = 8'388'608;  // Gameboy Color
 
 /**
  * SHARP LR35902 (Gameboy CPU)
@@ -33,7 +36,15 @@ class LR35902 {
 public:
     LR35902(MMU& mmu);
 
-    Registers getRegisters();
+    /**
+     * Registers
+     */
+    Registers regs;
+
+    /**
+     * Memory Manager Unit
+     */
+    MMU& mmu;
 
     /**
      * Run fetch-decode-execute cycle
@@ -41,14 +52,16 @@ public:
     ticks cycle();
 
 private:
-    Registers r;
-    MMU& mmu;
-
-    std::vector<std::function<ticks()>> iset;
-    std::vector<std::function<ticks()>> cb_iset;
+    std::vector<std::function<ticks()>> iset_;
+    std::vector<std::function<ticks()>> xset_;
 
     u8  next8();
     u16 next16();
+
+    u8  peek8();
+    u16 peek16();
+
+    void populateInstructionSets();
 };
 
 } // namespace goteborg

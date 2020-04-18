@@ -19,7 +19,7 @@ public:
     Emulator();
 
     void reset();
-    ticks step();
+    ticks_t step();
 
     LR35902& getCPU();
     MMU&     getMMU();

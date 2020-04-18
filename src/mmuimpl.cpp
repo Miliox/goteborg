@@ -20,12 +20,12 @@ MMUImpl::~MMUImpl() {
 
 }
 
-u8 MMUImpl::read(addr src) {
+u8 MMUImpl::read(addr_t src) {
     src = resolve(src);
     return mem.at(src);
 }
 
-addr MMUImpl::resolve(addr a) {
+addr_t MMUImpl::resolve(addr_t a) {
     /*
     $FFFF             Interrupt Enable Flag
     $FF80-$FFFE     Zero Page - 127 bytes
@@ -58,7 +58,7 @@ void MMUImpl::step(u8 ticks) {
     // Todo: DMA
 }
 
-void MMUImpl::transfer(addr dst, addr src) {
+void MMUImpl::transfer(addr_t dst, addr_t src) {
     dst = resolve(dst);
     src = resolve(src);
 
@@ -68,13 +68,13 @@ void MMUImpl::transfer(addr dst, addr src) {
     }
 }
 
-void MMUImpl::write(addr dst, u8 value) {
+void MMUImpl::write(addr_t dst, u8 value) {
     dst = resolve(dst);
     mem.at(dst) = value;
 }
 
-void MMUImpl::write(addr dst, const buffer& data) {
-    for (addr a = 0; a < data.size(); a++) {
+void MMUImpl::write(addr_t dst, const buffer_t& data) {
+    for (addr_t a = 0; a < data.size(); a++) {
         auto aux = resolve(dst + a);
         mem.at(aux) = data.at(a);
     }

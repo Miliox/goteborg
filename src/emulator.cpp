@@ -31,12 +31,12 @@ void Emulator::reset() {
         throw std::runtime_error("error: cannot load bios");
     }
 
-    buffer data(bios.getSize(), 0xff);
+    buffer_t data(bios.getSize(), 0xff);
     bios.read(reinterpret_cast<void*>(&data.front()), data.size());
 
     mmu.write(0, data);
 }
 
-ticks Emulator::step() {
+ticks_t Emulator::step() {
     return cpu.cycle();
 }

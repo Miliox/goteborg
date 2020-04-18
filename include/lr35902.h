@@ -49,17 +49,34 @@ public:
     /**
      * Run fetch-decode-execute cycle
      */
-    ticks cycle();
+    ticks_t cycle();
 
 private:
-    std::vector<std::function<ticks()>> iset_;
-    std::vector<std::function<ticks()>> xset_;
+    std::vector<std::function<ticks_t()>> iset_;
+
+    void call(addr_t a);
+    void ret();
+    void rst(addr_t a);
+    void push(u16& r);
+    void pop(u16& reg);
 
     u8  next8();
     u16 next16();
 
     u8  peek8();
     u16 peek16();
+
+    u8  read8(addr_t a);
+    u16 read16(addr_t a);
+
+    void write8(addr_t a, u8 v);
+    void write16(addr_t a, u16 v);
+
+    u8  zread8(u8 a);
+    u16 zread16(u8 a);
+
+    void zwrite8(u8 a, u8 v);
+    void zwrite16(u8 a, u16 v);
 
     void populateInstructionSets();
 };

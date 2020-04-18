@@ -21,9 +21,9 @@ typedef std::int16_t  s16;
 typedef std::int32_t  s32;
 typedef std::int64_t  s64;
 
-typedef std::uint16_t addr;
-typedef std::uint64_t ticks;
+typedef std::uint16_t addr_t;
+typedef std::uint64_t ticks_t;
 
-typedef std::vector<u8> buffer;
+typedef std::vector<u8> buffer_t;
 
 #endif /* !COMMON_H */

@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     Emulator emulator;
     emulator.reset();
 
-    ticks elapsedTicks = 0;
+    ticks_t elapsedTicks = 0;
 
     sf::Clock deltaClock;
     while (window.isOpen()) {

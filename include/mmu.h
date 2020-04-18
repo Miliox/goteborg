@@ -28,7 +28,7 @@ public:
     /**
      * Read value contained into address
      */
-    virtual u8 read(addr src) = 0;
+    virtual u8 read(addr_t src) = 0;
 
     /**
      * Execute internal dma transfer
@@ -38,12 +38,12 @@ public:
     /**
      * Begin DMA transfer 
      */
-    virtual void transfer(addr dst, addr src) = 0;
+    virtual void transfer(addr_t dst, addr_t src) = 0;
 
     /**
      * Write value to destination address
      */
-    virtual void write(addr dst, u8 value) = 0;
+    virtual void write(addr_t dst, u8 value) = 0;
 
 };
 

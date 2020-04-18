@@ -45,8 +45,8 @@ u8 LR35902::read8(addr_t a) {
 }
 
 u16 LR35902::read16(addr_t a) {
-    u8 hsb = mmu.read(a);
-    u8 lsb = mmu.read(a + 1);
+    u8 lsb = mmu.read(a);
+    u8 hsb = mmu.read(a + 1);
     return (hsb << 8) | lsb;
 }
 
@@ -1580,7 +1580,7 @@ ticks_t LR35902::opcodeCA() {
 ticks_t LR35902::opcodeCB() {
     regs.pc++;
 
-    auto opcode = peek8();               // fetch
+    auto opcode = peek8() + 0x100;       // fetch
     auto instruction = iset_.at(opcode); // decode
     return 4 + (this->*instruction)();   // execute
 }

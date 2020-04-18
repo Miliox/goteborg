@@ -101,8 +101,22 @@ int main(int argc, char** argv) {
             }
 
             auto op = disasm.at(opcode);
-            std::string format = std::string("%04x: ") + std::string(op.at("format"));
-            ImGui::Text(format.c_str(), addr, mmu.read(addr + 1), mmu.read(addr + 2));
+            int len = op.at("length");
+            auto text = std::string("%04x: ") + std::string(op.at("format"));
+
+            if (len == 1) {
+                ImGui::Text(text.c_str(), addr);
+            }
+            else if (len == 2) {
+                ImGui::Text(text.c_str(), addr,mmu.read(addr + 1));
+            }
+            else if (len == 3) {
+                ImGui::Text(text.c_str(), addr, mmu.read(addr + 2), mmu.read(addr + 1));
+            }
+            else {
+                ImGui::Text(text.c_str(), addr);
+            }
+
             addr += op.at("length").get<int>();
         }
 

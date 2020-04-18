@@ -265,11 +265,11 @@
     },
     {
       "opcode": 33,
-      "mnemonic": "LD SP,d16",
+      "mnemonic": "LD HL,d16",
       "length": 3,
       "cycles": 12,
       "flags": "- - - -",
-      "format": "LD SP,%02x%02x"
+      "format": "LD HL,%02x%02x"
     },
     {
       "opcode": 34,
@@ -1797,7 +1797,7 @@
       "length": 2,
       "cycles": 12,
       "flags": "- - - -",
-      "format": "LDH (%02x),A"
+      "format": "LD ($FF%02x),A"
     },
     {
       "opcode": 225,
@@ -1813,7 +1813,7 @@
       "length": 2,
       "cycles": 8,
       "flags": "- - - -",
-      "format": "LD (C),A"
+      "format": "LD ($FF00+C),A"
     },
     {
       "opcode": 227,
@@ -1925,7 +1925,7 @@
       "length": 2,
       "cycles": 12,
       "flags": "- - - -",
-      "format": "LDH A,(%02x)"
+      "format": "LD A,($FF%02x)"
     },
     {
       "opcode": 241,
@@ -1941,7 +1941,7 @@
       "length": 2,
       "cycles": 8,
       "flags": "- - - -",
-      "format": "LD A,(C)"
+      "format": "LD A,($FF00+C)"
     },
     {
       "opcode": 243,

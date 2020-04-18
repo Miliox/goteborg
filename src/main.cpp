@@ -19,6 +19,8 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
+#include <nlohmann/json.hpp>
+
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -28,9 +30,12 @@
 using namespace goteborg;
 
 void setCurrentWorkingDirectory(const char* appName);
+nlohmann::json loadDisasmData();
 
 int main(int argc, char** argv) {
     setCurrentWorkingDirectory(argv[0]);
+
+    auto disasm = loadDisasmData();
 
     sf::RenderWindow window(sf::VideoMode(640, 480), "Goteborg");
     window.setFramerateLimit(60);
@@ -38,6 +43,9 @@ int main(int argc, char** argv) {
 
     Emulator emulator;
     emulator.reset();
+
+    auto& r = emulator.getCPU().regs;
+    auto& mmu = emulator.getMMU();
 
     ticks_t elapsedTicks = 0;
 
@@ -58,7 +66,6 @@ int main(int argc, char** argv) {
 
         ImGui::SFML::Update(window, deltaClock.restart());
 
-        auto& r = emulator.getCPU().regs;
         ImGui::Begin("Debugger");
 
         ImGui::Text("PC   FLAGS    A  F  B  C  D  E  H  L  AF   BC   DE   HL   SP");
@@ -75,16 +82,29 @@ int main(int argc, char** argv) {
                     (r.f & 0b0000'0001) ? '1' : '-',
                     r.a, r.f, r.b, r.c, r.d, r.e, r.h, r.l, r.af, r.bc, r.de, r.hl, r.sp);
 
-        ImGui::Text("Next: %02X %02X %02X %02X %02X %02X %02X %02X",
-                    emulator.getMMU().read(r.pc),
-                    emulator.getMMU().read(r.pc + 1),
-                    emulator.getMMU().read(r.pc + 2),
-                    emulator.getMMU().read(r.pc + 3),
-                    emulator.getMMU().read(r.pc + 4),
-                    emulator.getMMU().read(r.pc + 5),
-                    emulator.getMMU().read(r.pc + 6),
-                    emulator.getMMU().read(r.pc + 7)
-        );
+        addr_t addr = r.pc;
+        for (int i = 0; i < 16; i++) {
+            size_t opcode = mmu.read(addr);
+
+            if (opcode == 0xcb) {
+                auto op = disasm.at(opcode);
+                std::string format = std::string("%04x: ") + std::string(op.at("format"));
+                ImGui::Text(format.c_str(), addr);
+
+                i += 1;
+                addr += 1;
+                opcode = 0x100 + mmu.read(addr);
+
+                if (i >= 16) {
+                    break;
+                }
+            }
+
+            auto op = disasm.at(opcode);
+            std::string format = std::string("%04x: ") + std::string(op.at("format"));
+            ImGui::Text(format.c_str(), addr, mmu.read(addr + 1), mmu.read(addr + 2));
+            addr += op.at("length").get<int>();
+        }
 
         ImGui::Text("Ticks: %017" PRIu64, elapsedTicks);
 
@@ -105,4 +125,9 @@ void setCurrentWorkingDirectory(const char* appName) {
     workdir = workdir.substr(0, workdir.rfind('/'));
     workdir += "/Resources";
     chdir(workdir.c_str());
+}
+
+nlohmann::json loadDisasmData() {
+    std::ifstream ifs("disasm.json");
+    return nlohmann::json::parse(ifs);
 }

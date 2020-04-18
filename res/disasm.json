@@ -1,0 +1,4098 @@
+[
+    {
+      "opcode": 0,
+      "mnemonic": "NOP",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "NOP"
+    },
+    {
+      "opcode": 1,
+      "mnemonic": "LD BC,d16",
+      "length": 3,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "LD BC,%02x02x"
+    },
+    {
+      "opcode": 2,
+      "mnemonic": "LD (BC),A",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (BC),A"
+    },
+    {
+      "opcode": 3,
+      "mnemonic": "INC BC",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "INC BC"
+    },
+    {
+      "opcode": 4,
+      "mnemonic": "INC B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H -",
+      "format": "INC B"
+    },
+    {
+      "opcode": 5,
+      "mnemonic": "DEC B",
+      "length": 1,
+      "cycles": 3,
+      "flags": "Z 1 H -",
+      "format": "DEC B"
+    },
+    {
+      "opcode": 6,
+      "mnemonic": "LD B,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD B,%02x"
+    },
+    {
+      "opcode": 7,
+      "mnemonic": "RLCA",
+      "length": 1,
+      "cycles": 4,
+      "flags": "0 0 0 C",
+      "format": "RLCA"
+    },
+    {
+      "opcode": 8,
+      "mnemonic": "LD (a16),SP",
+      "length": 3,
+      "cycles": 20,
+      "flags": "- - - -",
+      "format": "LD ($%02x%02x),SP"
+    },
+    {
+      "opcode": 9,
+      "mnemonic": "ADD HL,BC",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- 0 H C",
+      "format": "ADD HL,BC"
+    },
+    {
+      "opcode": 10,
+      "mnemonic": "LD A,(BC)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD A,(BC)"
+    },
+    {
+      "opcode": 11,
+      "mnemonic": "DEC BC",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "DEC BC"
+    },
+    {
+      "opcode": 12,
+      "mnemonic": "INC C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H -",
+      "format": "INC C"
+    },
+    {
+      "opcode": 13,
+      "mnemonic": "DEC C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H -",
+      "format": "DEC C"
+    },
+    {
+      "opcode": 14,
+      "mnemonic": "LD C,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD C,%02x"
+    },
+    {
+      "opcode": 15,
+      "mnemonic": "RRCA",
+      "length": 1,
+      "cycles": 4,
+      "flags": "0 0 0 C",
+      "format": "RRCA"
+    },
+    {
+      "opcode": 16,
+      "mnemonic": "STOP 0",
+      "length": 2,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "STOP 0"
+    },
+    {
+      "opcode": 17,
+      "mnemonic": "LD DE,d16",
+      "length": 3,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "LD DE,%02x%02x"
+    },
+    {
+      "opcode": 18,
+      "mnemonic": "LD (DE),A",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (DE),A"
+    },
+    {
+      "opcode": 19,
+      "mnemonic": "INC DE",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "INC DE"
+    },
+    {
+      "opcode": 20,
+      "mnemonic": "INC D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H -",
+      "format": "INC D"
+    },
+    {
+      "opcode": 21,
+      "mnemonic": "DEC D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H -",
+      "format": "DEC D"
+    },
+    {
+      "opcode": 22,
+      "mnemonic": "LD D,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD D,%02x"
+    },
+    {
+      "opcode": 23,
+      "mnemonic": "RLA",
+      "length": 1,
+      "cycles": 4,
+      "flags": "0 0 0 C",
+      "format": "RLA"
+    },
+    {
+      "opcode": 24,
+      "mnemonic": "JR r8",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "JR %02x"
+    },
+    {
+      "opcode": 25,
+      "mnemonic": "ADD HL,DE",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- 0 H C",
+      "format": "ADD HL,DE"
+    },
+    {
+      "opcode": 26,
+      "mnemonic": "LD A,(DE)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD A,(DE)"
+    },
+    {
+      "opcode": 27,
+      "mnemonic": "DEC DE",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "DEC DE"
+    },
+    {
+      "opcode": 28,
+      "mnemonic": "INC E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H -",
+      "format": "INC E"
+    },
+    {
+      "opcode": 29,
+      "mnemonic": "DEC E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H -",
+      "format": "DEC E"
+    },
+    {
+      "opcode": 30,
+      "mnemonic": "LD E,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD E,%02x"
+    },
+    {
+      "opcode": 31,
+      "mnemonic": "RRA",
+      "length": 1,
+      "cycles": 4,
+      "flags": "0 0 0 C",
+      "format": "RRA"
+    },
+    {
+      "opcode": 32,
+      "mnemonic": "JR NZ,r8",
+      "length": 2,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "JR NZ,%02x"
+    },
+    {
+      "opcode": 33,
+      "mnemonic": "LD SP,d16",
+      "length": 3,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "LD SP,%02x%02x"
+    },
+    {
+      "opcode": 34,
+      "mnemonic": "LD (HL+),A",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL+),A"
+    },
+    {
+      "opcode": 35,
+      "mnemonic": "INC HL",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "INC HL"
+    },
+    {
+      "opcode": 36,
+      "mnemonic": "INC H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H -",
+      "format": "INC H"
+    },
+    {
+      "opcode": 37,
+      "mnemonic": "DEC H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H -",
+      "format": "DEC H"
+    },
+    {
+      "opcode": 38,
+      "mnemonic": "LD H,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD H,%02x"
+    },
+    {
+      "opcode": 39,
+      "mnemonic": "DAA",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z - 0 C",
+      "format": "DAA"
+    },
+    {
+      "opcode": 40,
+      "mnemonic": "JR Z,r8",
+      "length": 2,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "JR Z,%02x"
+    },
+    {
+      "opcode": 41,
+      "mnemonic": "ADD HL,HL",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- 0 H C",
+      "format": "ADD, HL,HL"
+    },
+    {
+      "opcode": 42,
+      "mnemonic": "LD A,(HL+)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD A,(HL+)"
+    },
+    {
+      "opcode": 43,
+      "mnemonic": "DEC HL",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "DEC HL"
+    },
+    {
+      "opcode": 44,
+      "mnemonic": "INC L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H -",
+      "format": "INC L"
+    },
+    {
+      "opcode": 45,
+      "mnemonic": "DEC L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H -",
+      "format": "DEC L"
+    },
+    {
+      "opcode": 46,
+      "mnemonic": "LD L,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD L,%02x"
+    },
+    {
+      "opcode": 47,
+      "mnemonic": "CPL",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- 1 1 -",
+      "format": "CPL"
+    },
+    {
+      "opcode": 48,
+      "mnemonic": "JR NC,r8",
+      "length": 2,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "JR NC,%02x"
+    },
+    {
+      "opcode": 49,
+      "mnemonic": "LD SP,d16",
+      "length": 3,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "LD SP,%02x%02x"
+    },
+    {
+      "opcode": 50,
+      "mnemonic": "LD (HL-),A",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL-),A"
+    },
+    {
+      "opcode": 51,
+      "mnemonic": "INC SP",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "INC SP"
+    },
+    {
+      "opcode": 52,
+      "mnemonic": "INC (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 H -",
+      "format": "INC (HL)"
+    },
+    {
+      "opcode": 53,
+      "mnemonic": "DEC (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 1 H -",
+      "format": "DEC (HL)"
+    },
+    {
+      "opcode": 54,
+      "mnemonic": "LD (HL),d8",
+      "length": 2,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "LD (HL),%02x"
+    },
+    {
+      "opcode": 55,
+      "mnemonic": "SCF",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- 0 0 1",
+      "format": "SCF"
+    },
+    {
+      "opcode": 56,
+      "mnemonic": "JR C,r8",
+      "length": 2,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "JR C,%02x"
+    },
+    {
+      "opcode": 57,
+      "mnemonic": "ADD HL,SP",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- 0 H C",
+      "format": "ADD HL,SP"
+    },
+    {
+      "opcode": 58,
+      "mnemonic": "LD A,(HL-)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD A,(HL-)"
+    },
+    {
+      "opcode": 59,
+      "mnemonic": "DEC SP",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "DEC SP"
+    },
+    {
+      "opcode": 60,
+      "mnemonic": "INC A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H -",
+      "format": "INC A"
+    },
+    {
+      "opcode": 61,
+      "mnemonic": "DEC A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H -",
+      "format": "DEC A"
+    },
+    {
+      "opcode": 62,
+      "mnemonic": "LD A,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD A,%02x"
+    },
+    {
+      "opcode": 63,
+      "mnemonic": "CCF",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- 0 0 C",
+      "format": "CCF"
+    },
+    {
+      "opcode": 64,
+      "mnemonic": "LD B,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD B,B"
+    },
+    {
+      "opcode": 65,
+      "mnemonic": "LD B,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD B,C"
+    },
+    {
+      "opcode": 66,
+      "mnemonic": "LD B,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD B,D"
+    },
+    {
+      "opcode": 67,
+      "mnemonic": "LD B,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD B,E"
+    },
+    {
+      "opcode": 68,
+      "mnemonic": "LD B,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD B,H"
+    },
+    {
+      "opcode": 69,
+      "mnemonic": "LD B,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD B,L"
+    },
+    {
+      "opcode": 70,
+      "mnemonic": "LD B,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD B,(HL)"
+    },
+    {
+      "opcode": 71,
+      "mnemonic": "LD B,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD B,A"
+    },
+    {
+      "opcode": 72,
+      "mnemonic": "LD C,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD C,B"
+    },
+    {
+      "opcode": 73,
+      "mnemonic": "LD C,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD C,C"
+    },
+    {
+      "opcode": 74,
+      "mnemonic": "LD C,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD C,D"
+    },
+    {
+      "opcode": 75,
+      "mnemonic": "LD C,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD C,E"
+    },
+    {
+      "opcode": 76,
+      "mnemonic": "LD C,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD C,H"
+    },
+    {
+      "opcode": 77,
+      "mnemonic": "LD C,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD C,L"
+    },
+    {
+      "opcode": 78,
+      "mnemonic": "LD C,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD C,(HL)"
+    },
+    {
+      "opcode": 79,
+      "mnemonic": "LD C,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD C,A"
+    },
+    {
+      "opcode": 80,
+      "mnemonic": "LD D,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD D,B"
+    },
+    {
+      "opcode": 81,
+      "mnemonic": "LD D,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD D,C"
+    },
+    {
+      "opcode": 82,
+      "mnemonic": "LD D,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD D,D"
+    },
+    {
+      "opcode": 83,
+      "mnemonic": "LD D,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD D,E"
+    },
+    {
+      "opcode": 84,
+      "mnemonic": "LD D,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD D,H"
+    },
+    {
+      "opcode": 85,
+      "mnemonic": "LD D,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD D,L"
+    },
+    {
+      "opcode": 86,
+      "mnemonic": "LD D,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD D,(HL)"
+    },
+    {
+      "opcode": 87,
+      "mnemonic": "LD D,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD D,A"
+    },
+    {
+      "opcode": 88,
+      "mnemonic": "LD E,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD E,B"
+    },
+    {
+      "opcode": 89,
+      "mnemonic": "LD E,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD E,C"
+    },
+    {
+      "opcode": 90,
+      "mnemonic": "LD E,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD E,D"
+    },
+    {
+      "opcode": 91,
+      "mnemonic": "LD E,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD E,E"
+    },
+    {
+      "opcode": 92,
+      "mnemonic": "LD E,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD E,H"
+    },
+    {
+      "opcode": 93,
+      "mnemonic": "LD E,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD E,L"
+    },
+    {
+      "opcode": 94,
+      "mnemonic": "LD E,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD E,(HL)"
+    },
+    {
+      "opcode": 95,
+      "mnemonic": "LD E,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD E,A"
+    },
+    {
+      "opcode": 96,
+      "mnemonic": "LD H,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD H,B"
+    },
+    {
+      "opcode": 97,
+      "mnemonic": "LD H,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD H,C"
+    },
+    {
+      "opcode": 98,
+      "mnemonic": "LD H,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD H,D"
+    },
+    {
+      "opcode": 99,
+      "mnemonic": "LD H,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD H,E"
+    },
+    {
+      "opcode": 100,
+      "mnemonic": "LD H,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD H,H"
+    },
+    {
+      "opcode": 101,
+      "mnemonic": "LD H,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD H,L"
+    },
+    {
+      "opcode": 102,
+      "mnemonic": "LD H,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD H,(HL)"
+    },
+    {
+      "opcode": 103,
+      "mnemonic": "LD H,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD H,A"
+    },
+    {
+      "opcode": 104,
+      "mnemonic": "LD L,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD L,B"
+    },
+    {
+      "opcode": 105,
+      "mnemonic": "LD L,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD L,C"
+    },
+    {
+      "opcode": 106,
+      "mnemonic": "LD L,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD L,D"
+    },
+    {
+      "opcode": 107,
+      "mnemonic": "LD L,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD L,E"
+    },
+    {
+      "opcode": 108,
+      "mnemonic": "LD L,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD L,H"
+    },
+    {
+      "opcode": 109,
+      "mnemonic": "LD L,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD L,L"
+    },
+    {
+      "opcode": 110,
+      "mnemonic": "LD L,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD L,(HL)"
+    },
+    {
+      "opcode": 111,
+      "mnemonic": "LD L,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD L,A"
+    },
+    {
+      "opcode": 112,
+      "mnemonic": "LD (HL),B",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL),B"
+    },
+    {
+      "opcode": 113,
+      "mnemonic": "LD (HL),C",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL),C"
+    },
+    {
+      "opcode": 114,
+      "mnemonic": "LD (HL),D",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL),D"
+    },
+    {
+      "opcode": 115,
+      "mnemonic": "LD (HL),E",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL),E"
+    },
+    {
+      "opcode": 116,
+      "mnemonic": "LD (HL),H",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL),H"
+    },
+    {
+      "opcode": 117,
+      "mnemonic": "LD (HL),L",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL),L"
+    },
+    {
+      "opcode": 118,
+      "mnemonic": "HALT",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "HALT"
+    },
+    {
+      "opcode": 119,
+      "mnemonic": "LD (HL),A",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (HL),A"
+    },
+    {
+      "opcode": 120,
+      "mnemonic": "LD A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD A,B"
+    },
+    {
+      "opcode": 121,
+      "mnemonic": "LD A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD A,C"
+    },
+    {
+      "opcode": 122,
+      "mnemonic": "LD A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD A,D"
+    },
+    {
+      "opcode": 123,
+      "mnemonic": "LD A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD A,E"
+    },
+    {
+      "opcode": 124,
+      "mnemonic": "LD A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD A,H"
+    },
+    {
+      "opcode": 125,
+      "mnemonic": "LD A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD A,L"
+    },
+    {
+      "opcode": 126,
+      "mnemonic": "LD A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD A,(HL)"
+    },
+    {
+      "opcode": 127,
+      "mnemonic": "LD A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "LD A,A"
+    },
+    {
+      "opcode": 128,
+      "mnemonic": "ADD A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADD A,B"
+    },
+    {
+      "opcode": 129,
+      "mnemonic": "ADD A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADD A,C"
+    },
+    {
+      "opcode": 130,
+      "mnemonic": "ADD A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADD A,D"
+    },
+    {
+      "opcode": 131,
+      "mnemonic": "ADD A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADD A,E"
+    },
+    {
+      "opcode": 132,
+      "mnemonic": "ADD A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADD A,H"
+    },
+    {
+      "opcode": 133,
+      "mnemonic": "ADD A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADD A,L"
+    },
+    {
+      "opcode": 134,
+      "mnemonic": "ADD A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "Z 0 H C",
+      "format": "ADD A,(HL)"
+    },
+    {
+      "opcode": 135,
+      "mnemonic": "ADD A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADD A,A"
+    },
+    {
+      "opcode": 136,
+      "mnemonic": "ADC A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADC A,B"
+    },
+    {
+      "opcode": 137,
+      "mnemonic": "ADC A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADC A,C"
+    },
+    {
+      "opcode": 138,
+      "mnemonic": "ADC A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADC A,D"
+    },
+    {
+      "opcode": 139,
+      "mnemonic": "ADC A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADC A,E"
+    },
+    {
+      "opcode": 140,
+      "mnemonic": "ADC A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADC A,H"
+    },
+    {
+      "opcode": 141,
+      "mnemonic": "ADC A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADC A,L"
+    },
+    {
+      "opcode": 142,
+      "mnemonic": "ADC A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "Z 0 H C",
+      "format": "ADC A,(HL)"
+    },
+    {
+      "opcode": 143,
+      "mnemonic": "ADC A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 H C",
+      "format": "ADC A,A"
+    },
+    {
+      "opcode": 144,
+      "mnemonic": "SUB A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SUB A,B"
+    },
+    {
+      "opcode": 145,
+      "mnemonic": "SUB A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SUB A,C"
+    },
+    {
+      "opcode": 146,
+      "mnemonic": "SUB A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SUB A,D"
+    },
+    {
+      "opcode": 147,
+      "mnemonic": "SUB A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SUB A,E"
+    },
+    {
+      "opcode": 148,
+      "mnemonic": "SUB A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SUB A,H"
+    },
+    {
+      "opcode": 149,
+      "mnemonic": "SUB A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SUB A,L"
+    },
+    {
+      "opcode": 150,
+      "mnemonic": "SUB A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "Z 1 H C",
+      "format": "SUB A,(HL)"
+    },
+    {
+      "opcode": 151,
+      "mnemonic": "SUB A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SUB A,A"
+    },
+    {
+      "opcode": 152,
+      "mnemonic": "SBC A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SBC A,B"
+    },
+    {
+      "opcode": 153,
+      "mnemonic": "SBC A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SBC A,C"
+    },
+    {
+      "opcode": 154,
+      "mnemonic": "SBC A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SBC A,D"
+    },
+    {
+      "opcode": 155,
+      "mnemonic": "SBC A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SBC A,E"
+    },
+    {
+      "opcode": 156,
+      "mnemonic": "SBC A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SBC A,H"
+    },
+    {
+      "opcode": 157,
+      "mnemonic": "SBC A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SBC A,L"
+    },
+    {
+      "opcode": 158,
+      "mnemonic": "SBC A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "Z 1 H C",
+      "format": "SBC A,(HL)"
+    },
+    {
+      "opcode": 159,
+      "mnemonic": "SBC A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "SBC A,A"
+    },
+    {
+      "opcode": 160,
+      "mnemonic": "AND A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 0",
+      "format": "AND A,B"
+    },
+    {
+      "opcode": 161,
+      "mnemonic": "AND A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 0",
+      "format": "AND A,C"
+    },
+    {
+      "opcode": 162,
+      "mnemonic": "AND A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 0",
+      "format": "AND A,D"
+    },
+    {
+      "opcode": 163,
+      "mnemonic": "AND A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 0",
+      "format": "AND A,E"
+    },
+    {
+      "opcode": 164,
+      "mnemonic": "AND A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 0",
+      "format": "AND A,H"
+    },
+    {
+      "opcode": 165,
+      "mnemonic": "AND A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 0",
+      "format": "AND A,L"
+    },
+    {
+      "opcode": 166,
+      "mnemonic": "AND A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "Z 0 1 0",
+      "format": "AND A,(HL)"
+    },
+    {
+      "opcode": 167,
+      "mnemonic": "AND A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 0",
+      "format": "AND A,A"
+    },
+    {
+      "opcode": 168,
+      "mnemonic": "XOR A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "XOR A,B"
+    },
+    {
+      "opcode": 169,
+      "mnemonic": "XOR A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "XOR A,C"
+    },
+    {
+      "opcode": 170,
+      "mnemonic": "XOR A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "XOR A,D"
+    },
+    {
+      "opcode": 171,
+      "mnemonic": "XOR A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "XOR A,E"
+    },
+    {
+      "opcode": 172,
+      "mnemonic": "XOR A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "XOR A,H"
+    },
+    {
+      "opcode": 173,
+      "mnemonic": "XOR A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "XOR A,L"
+    },
+    {
+      "opcode": 174,
+      "mnemonic": "XOR A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "Z 0 0 0",
+      "format": "XOR A,(HL)"
+    },
+    {
+      "opcode": 175,
+      "mnemonic": "XOR A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "XOR A,A"
+    },
+    {
+      "opcode": 176,
+      "mnemonic": "OR A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "OR A,B"
+    },
+    {
+      "opcode": 177,
+      "mnemonic": "OR A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "OR A,C"
+    },
+    {
+      "opcode": 178,
+      "mnemonic": "OR A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "OR A,D"
+    },
+    {
+      "opcode": 179,
+      "mnemonic": "OR A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "OR A,E"
+    },
+    {
+      "opcode": 180,
+      "mnemonic": "OR A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "OR A,H"
+    },
+    {
+      "opcode": 181,
+      "mnemonic": "OR A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "OR A,L"
+    },
+    {
+      "opcode": 182,
+      "mnemonic": "OR A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "Z 0 0 0",
+      "format": "OR A,(HL)"
+    },
+    {
+      "opcode": 183,
+      "mnemonic": "OR A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "OR A,A"
+    },
+    {
+      "opcode": 184,
+      "mnemonic": "CP A,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "CP A,B"
+    },
+    {
+      "opcode": 185,
+      "mnemonic": "CP A,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "CP A,C"
+    },
+    {
+      "opcode": 186,
+      "mnemonic": "CP A,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "CP A,D"
+    },
+    {
+      "opcode": 187,
+      "mnemonic": "CP A,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "CP A,E"
+    },
+    {
+      "opcode": 188,
+      "mnemonic": "CP A,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "CP A,H"
+    },
+    {
+      "opcode": 189,
+      "mnemonic": "CP A,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "CP A,L"
+    },
+    {
+      "opcode": 190,
+      "mnemonic": "CP A,(HL)",
+      "length": 1,
+      "cycles": 8,
+      "flags": "Z 1 H C",
+      "format": "CP A,(HL)"
+    },
+    {
+      "opcode": 191,
+      "mnemonic": "CP A,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 1 H C",
+      "format": "CP A,A"
+    },
+    {
+      "opcode": 192,
+      "mnemonic": "RET NZ",
+      "length": 1,
+      "cycles": 20,
+      "flags": "- - - -",
+      "format": "RET NC"
+    },
+    {
+      "opcode": 193,
+      "mnemonic": "POP BC",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "POP BC"
+    },
+    {
+      "opcode": 194,
+      "mnemonic": "JP NZ,a16",
+      "length": 3,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "JP NZ,%02x%02x"
+    },
+    {
+      "opcode": 195,
+      "mnemonic": "JP a16",
+      "length": 3,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "JP %02x%02x"
+    },
+    {
+      "opcode": 196,
+      "mnemonic": "CALL NZ,a16",
+      "length": 3,
+      "cycles": 24,
+      "flags": "- - - -",
+      "format": "CALL NZ,%02x%02x"
+    },
+    {
+      "opcode": 197,
+      "mnemonic": "PUSH BC",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "PUSH BC"
+    },
+    {
+      "opcode": 198,
+      "mnemonic": "ADD A,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "Z 0 H C",
+      "format": "ADD A,%02x"
+    },
+    {
+      "opcode": 199,
+      "mnemonic": "RST 00",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RST 00"
+    },
+    {
+      "opcode": 200,
+      "mnemonic": "RET Z",
+      "length": 1,
+      "cycles": 20,
+      "flags": "- - - -",
+      "format": "RET Z"
+    },
+    {
+      "opcode": 201,
+      "mnemonic": "RET",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RET"
+    },
+    {
+      "opcode": 202,
+      "mnemonic": "JP Z,a16",
+      "length": 3,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "JP Z,%02x%02x"
+    },
+    {
+      "opcode": 203,
+      "mnemonic": "PREFIX CB",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "PREFIX CB"
+    },
+    {
+      "opcode": 204,
+      "mnemonic": "CALL Z,a16",
+      "length": 3,
+      "cycles": 24,
+      "flags": "- - - -",
+      "format": "CALL Z,%02x%02x"
+    },
+    {
+      "opcode": 205,
+      "mnemonic": "CALL a16",
+      "length": 3,
+      "cycles": 24,
+      "flags": "- - - -",
+      "format": "CALL %02x%02x"
+    },
+    {
+      "opcode": 206,
+      "mnemonic": "ADC A,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "Z 0 H C",
+      "format": "ADC A,%02x"
+    },
+    {
+      "opcode": 207,
+      "mnemonic": "RST 08",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RST 08"
+    },
+    {
+      "opcode": 208,
+      "mnemonic": "RET NC",
+      "length": 1,
+      "cycles": 20,
+      "flags": "- - - -",
+      "format": "RET NC"
+    },
+    {
+      "opcode": 209,
+      "mnemonic": "POP DE",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "POP DE"
+    },
+    {
+      "opcode": 210,
+      "mnemonic": "JP NC,a16",
+      "length": 3,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "JP NC,%02x%02x"
+    },
+    {
+      "opcode": 211,
+      "mnemonic": "INVALID D3",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID D3"
+    },
+    {
+      "opcode": 212,
+      "mnemonic": "CALL NC,a16",
+      "length": 3,
+      "cycles": 24,
+      "flags": "- - - -",
+      "format": "CALL NC,%02x%02x"
+    },
+    {
+      "opcode": 213,
+      "mnemonic": "PUSH DE",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "PUSH DE"
+    },
+    {
+      "opcode": 214,
+      "mnemonic": "SUB d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "Z 1 H C",
+      "format": "SUB %02x"
+    },
+    {
+      "opcode": 215,
+      "mnemonic": "RST 10",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RST 10"
+    },
+    {
+      "opcode": 216,
+      "mnemonic": "RET C",
+      "length": 1,
+      "cycles": 20,
+      "flags": "- - - -",
+      "format": "RET C"
+    },
+    {
+      "opcode": 217,
+      "mnemonic": "RETI",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RETI"
+    },
+    {
+      "opcode": 218,
+      "mnemonic": "JP C,a16",
+      "length": 3,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "JP C,%02x%02x"
+    },
+    {
+      "opcode": 219,
+      "mnemonic": "INVALID DB",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID DB"
+    },
+    {
+      "opcode": 220,
+      "mnemonic": "CALL C,a16",
+      "length": 3,
+      "cycles": 24,
+      "flags": "- - - -",
+      "format": "CALL C,%02x%02x"
+    },
+    {
+      "opcode": 221,
+      "mnemonic": "INVALID DD",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID DD"
+    },
+    {
+      "opcode": 222,
+      "mnemonic": "SBC A,d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "Z 1 H C",
+      "format": "SBC A,%02x"
+    },
+    {
+      "opcode": 223,
+      "mnemonic": "RST 18",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RST 18"
+    },
+    {
+      "opcode": 224,
+      "mnemonic": "LDH (a8),A",
+      "length": 2,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "LDH (%02x),A"
+    },
+    {
+      "opcode": 225,
+      "mnemonic": "POP HL",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "POP HL"
+    },
+    {
+      "opcode": 226,
+      "mnemonic": "LD (C),A",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD (C),A"
+    },
+    {
+      "opcode": 227,
+      "mnemonic": "INVALID E3",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID E3"
+    },
+    {
+      "opcode": 228,
+      "mnemonic": "INVALID E4",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID E4"
+    },
+    {
+      "opcode": 229,
+      "mnemonic": "PUSH HL",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "PUSH HL"
+    },
+    {
+      "opcode": 230,
+      "mnemonic": "AND d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "Z 0 1 0",
+      "format": "AND %02x"
+    },
+    {
+      "opcode": 231,
+      "mnemonic": "RST 20",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RST 20"
+    },
+    {
+      "opcode": 232,
+      "mnemonic": "ADD SP,r8",
+      "length": 2,
+      "cycles": 16,
+      "flags": "0 0 H C",
+      "format": "ADD SP,%02x"
+    },
+    {
+      "opcode": 233,
+      "mnemonic": "JP (HL)",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "JP (HL)"
+    },
+    {
+      "opcode": 234,
+      "mnemonic": "LD (a16),A",
+      "length": 3,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "LD (%02x%02x),A"
+    },
+    {
+      "opcode": 235,
+      "mnemonic": "INVALID EB",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID EB"
+    },
+    {
+      "opcode": 236,
+      "mnemonic": "INVALID EC",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID EC"
+    },
+    {
+      "opcode": 237,
+      "mnemonic": "INVALID ED",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID ED"
+    },
+    {
+      "opcode": 238,
+      "mnemonic": "XOR d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "Z 0 0 0",
+      "format": "XOR %02x"
+    },
+    {
+      "opcode": 239,
+      "mnemonic": "RST 28",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RST 28"
+    },
+    {
+      "opcode": 240,
+      "mnemonic": "LDH A,(a8)",
+      "length": 2,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "LDH A,(%02x)"
+    },
+    {
+      "opcode": 241,
+      "mnemonic": "POP AF",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z N H C",
+      "format": "POP AF"
+    },
+    {
+      "opcode": 242,
+      "mnemonic": "LD A,(C)",
+      "length": 2,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD A,(C)"
+    },
+    {
+      "opcode": 243,
+      "mnemonic": "DI",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "DI"
+    },
+    {
+      "opcode": 244,
+      "mnemonic": "INVALID F4",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID F4"
+    },
+    {
+      "opcode": 245,
+      "mnemonic": "PUSH AF",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "PUSH AF"
+    },
+    {
+      "opcode": 246,
+      "mnemonic": "OR d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "Z 0 0 0",
+      "format": "OR %02x"
+    },
+    {
+      "opcode": 247,
+      "mnemonic": "RST 30",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RST 30"
+    },
+    {
+      "opcode": 248,
+      "mnemonic": "LD HL,SP+r8",
+      "length": 2,
+      "cycles": 12,
+      "flags": "0 0 H C",
+      "format": "LD HL,SP+%02x"
+    },
+    {
+      "opcode": 249,
+      "mnemonic": "LD SP,HL",
+      "length": 1,
+      "cycles": 8,
+      "flags": "- - - -",
+      "format": "LD SP,HL"
+    },
+    {
+      "opcode": 250,
+      "mnemonic": "LD A,(a16)",
+      "length": 3,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "LD A,%02x%02x"
+    },
+    {
+      "opcode": 251,
+      "mnemonic": "EI",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "EI"
+    },
+    {
+      "opcode": 252,
+      "mnemonic": "INVALID FC",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID FC"
+    },
+    {
+      "opcode": 253,
+      "mnemonic": "INVALID FD",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "INVALID FD"
+    },
+    {
+      "opcode": 254,
+      "mnemonic": "CP d8",
+      "length": 2,
+      "cycles": 8,
+      "flags": "Z 1 H C",
+      "format": "CP %02x"
+    },
+    {
+      "opcode": 255,
+      "mnemonic": "RST 38",
+      "length": 1,
+      "cycles": 16,
+      "flags": "- - - -",
+      "format": "RST 38"
+    },
+    {
+      "opcode": 256,
+      "mnemonic": "RLC B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RLC B"
+    },
+    {
+      "opcode": 257,
+      "mnemonic": "RLC C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RLC C"
+    },
+    {
+      "opcode": 258,
+      "mnemonic": "RLC D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RLC D"
+    },
+    {
+      "opcode": 259,
+      "mnemonic": "RLC E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RLC E"
+    },
+    {
+      "opcode": 260,
+      "mnemonic": "RLC H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RLC H"
+    },
+    {
+      "opcode": 261,
+      "mnemonic": "RLC L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RLC L"
+    },
+    {
+      "opcode": 262,
+      "mnemonic": "RLC (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 0 C",
+      "format": "RLC (HL)"
+    },
+    {
+      "opcode": 263,
+      "mnemonic": "RLC A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RLC B,A"
+    },
+    {
+      "opcode": 264,
+      "mnemonic": "RRC B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RRC B"
+    },
+    {
+      "opcode": 265,
+      "mnemonic": "RRC C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RRC C"
+    },
+    {
+      "opcode": 266,
+      "mnemonic": "RRC D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RRC D"
+    },
+    {
+      "opcode": 267,
+      "mnemonic": "RRC E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RRC E"
+    },
+    {
+      "opcode": 268,
+      "mnemonic": "RRC H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RRC H"
+    },
+    {
+      "opcode": 269,
+      "mnemonic": "RRC L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RRC L"
+    },
+    {
+      "opcode": 270,
+      "mnemonic": "RRC (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 0 C",
+      "format": "RRC (HL)"
+    },
+    {
+      "opcode": 271,
+      "mnemonic": "RRC A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RRC A"
+    },
+    {
+      "opcode": 272,
+      "mnemonic": "RL B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RL B"
+    },
+    {
+      "opcode": 273,
+      "mnemonic": "RL C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RL C"
+    },
+    {
+      "opcode": 274,
+      "mnemonic": "RL D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RL D"
+    },
+    {
+      "opcode": 275,
+      "mnemonic": "RL E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RL E"
+    },
+    {
+      "opcode": 276,
+      "mnemonic": "RL H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RL H"
+    },
+    {
+      "opcode": 277,
+      "mnemonic": "RL L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RL L"
+    },
+    {
+      "opcode": 278,
+      "mnemonic": "RL (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 0 C",
+      "format": "RL (HL)"
+    },
+    {
+      "opcode": 279,
+      "mnemonic": "RL A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RL B,A"
+    },
+    {
+      "opcode": 280,
+      "mnemonic": "RR B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RR B"
+    },
+    {
+      "opcode": 281,
+      "mnemonic": "RR C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RR C"
+    },
+    {
+      "opcode": 282,
+      "mnemonic": "RR D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RR D"
+    },
+    {
+      "opcode": 283,
+      "mnemonic": "RR E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RR E"
+    },
+    {
+      "opcode": 284,
+      "mnemonic": "RR H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RR H"
+    },
+    {
+      "opcode": 285,
+      "mnemonic": "RR L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RR L"
+    },
+    {
+      "opcode": 286,
+      "mnemonic": "RR (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 0 C",
+      "format": "RR (HL)"
+    },
+    {
+      "opcode": 287,
+      "mnemonic": "RR A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "RR A"
+    },
+    {
+      "opcode": 288,
+      "mnemonic": "SLA B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SLA B"
+    },
+    {
+      "opcode": 289,
+      "mnemonic": "SLA C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SLA C"
+    },
+    {
+      "opcode": 290,
+      "mnemonic": "SLA D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SLA D"
+    },
+    {
+      "opcode": 291,
+      "mnemonic": "SLA E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SLA E"
+    },
+    {
+      "opcode": 292,
+      "mnemonic": "SLA H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SLA H"
+    },
+    {
+      "opcode": 293,
+      "mnemonic": "SLA L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SLA L"
+    },
+    {
+      "opcode": 294,
+      "mnemonic": "SLA (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 0 C",
+      "format": "SLA (HL)"
+    },
+    {
+      "opcode": 295,
+      "mnemonic": "SLA A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SLA A"
+    },
+    {
+      "opcode": 296,
+      "mnemonic": "SRA B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SRA B"
+    },
+    {
+      "opcode": 297,
+      "mnemonic": "SRA C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SRA C"
+    },
+    {
+      "opcode": 298,
+      "mnemonic": "SRA D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SRA D"
+    },
+    {
+      "opcode": 299,
+      "mnemonic": "SRA E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SRA E"
+    },
+    {
+      "opcode": 300,
+      "mnemonic": "SRA H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SRA H"
+    },
+    {
+      "opcode": 301,
+      "mnemonic": "SRA L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SRA L"
+    },
+    {
+      "opcode": 302,
+      "mnemonic": "SRA (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 0 0",
+      "format": "SRA (HL)"
+    },
+    {
+      "opcode": 303,
+      "mnemonic": "SRA A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SRA A"
+    },
+    {
+      "opcode": 304,
+      "mnemonic": "SWAP B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SWAP B"
+    },
+    {
+      "opcode": 305,
+      "mnemonic": "SWAP C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SWAP C"
+    },
+    {
+      "opcode": 306,
+      "mnemonic": "SWAP D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SWAP D"
+    },
+    {
+      "opcode": 307,
+      "mnemonic": "SWAP E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SWAP E"
+    },
+    {
+      "opcode": 308,
+      "mnemonic": "SWAP H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SWAP H"
+    },
+    {
+      "opcode": 309,
+      "mnemonic": "SWAP L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SWAP L"
+    },
+    {
+      "opcode": 310,
+      "mnemonic": "SWAP (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 0 0",
+      "format": "SWAP (HL)"
+    },
+    {
+      "opcode": 311,
+      "mnemonic": "SWAP A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 0",
+      "format": "SWAP A"
+    },
+    {
+      "opcode": 312,
+      "mnemonic": "SRL B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SRL B"
+    },
+    {
+      "opcode": 313,
+      "mnemonic": "SRL C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SRL C"
+    },
+    {
+      "opcode": 314,
+      "mnemonic": "SRL D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SRL D"
+    },
+    {
+      "opcode": 315,
+      "mnemonic": "SRL E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SRL E"
+    },
+    {
+      "opcode": 316,
+      "mnemonic": "SRL H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SRL H"
+    },
+    {
+      "opcode": 317,
+      "mnemonic": "SRL L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SRL L"
+    },
+    {
+      "opcode": 318,
+      "mnemonic": "SRL (HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 0 C",
+      "format": "SRL (HL)"
+    },
+    {
+      "opcode": 319,
+      "mnemonic": "SRL A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 0 C",
+      "format": "SRL A"
+    },
+    {
+      "opcode": 320,
+      "mnemonic": "BIT 0,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 0,B"
+    },
+    {
+      "opcode": 321,
+      "mnemonic": "BIT 0,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 0,C"
+    },
+    {
+      "opcode": 322,
+      "mnemonic": "BIT 0,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 0,D"
+    },
+    {
+      "opcode": 323,
+      "mnemonic": "BIT 0,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 0,E"
+    },
+    {
+      "opcode": 324,
+      "mnemonic": "BIT 0,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 0,H"
+    },
+    {
+      "opcode": 325,
+      "mnemonic": "BIT 0,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 0,L"
+    },
+    {
+      "opcode": 326,
+      "mnemonic": "BIT 0,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 1 -",
+      "format": "BIT 0,(HL)"
+    },
+    {
+      "opcode": 327,
+      "mnemonic": "BIT 0,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 0,A"
+    },
+    {
+      "opcode": 328,
+      "mnemonic": "BIT 1,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 1,B"
+    },
+    {
+      "opcode": 329,
+      "mnemonic": "BIT 1,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 1,C"
+    },
+    {
+      "opcode": 330,
+      "mnemonic": "BIT 1,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 1,D"
+    },
+    {
+      "opcode": 331,
+      "mnemonic": "BIT 1,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 1,E"
+    },
+    {
+      "opcode": 332,
+      "mnemonic": "BIT 1,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 1,H"
+    },
+    {
+      "opcode": 333,
+      "mnemonic": "BIT 1,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 1,L"
+    },
+    {
+      "opcode": 334,
+      "mnemonic": "BIT 1,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 1 -",
+      "format": "BIT 1,(HL)"
+    },
+    {
+      "opcode": 335,
+      "mnemonic": "BIT 1,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 1,A"
+    },
+    {
+      "opcode": 336,
+      "mnemonic": "BIT 2,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 2,B"
+    },
+    {
+      "opcode": 337,
+      "mnemonic": "BIT 2,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 2,C"
+    },
+    {
+      "opcode": 338,
+      "mnemonic": "BIT 2,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 2,D"
+    },
+    {
+      "opcode": 339,
+      "mnemonic": "BIT 2,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 2,E"
+    },
+    {
+      "opcode": 340,
+      "mnemonic": "BIT 2,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 2,H"
+    },
+    {
+      "opcode": 341,
+      "mnemonic": "BIT 2,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 2,L"
+    },
+    {
+      "opcode": 342,
+      "mnemonic": "BIT 2,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 1 -",
+      "format": "BIT 2,(HL)"
+    },
+    {
+      "opcode": 343,
+      "mnemonic": "BIT 2,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 2,A"
+    },
+    {
+      "opcode": 344,
+      "mnemonic": "BIT 3,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 3,B"
+    },
+    {
+      "opcode": 345,
+      "mnemonic": "BIT 3,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 3,C"
+    },
+    {
+      "opcode": 346,
+      "mnemonic": "BIT 3,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 3,D"
+    },
+    {
+      "opcode": 347,
+      "mnemonic": "BIT 3,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 3,E"
+    },
+    {
+      "opcode": 348,
+      "mnemonic": "BIT 3,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 3,H"
+    },
+    {
+      "opcode": 349,
+      "mnemonic": "BIT 3,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 3,L"
+    },
+    {
+      "opcode": 350,
+      "mnemonic": "BIT 3,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 1 -",
+      "format": "BIT 3,(HL)"
+    },
+    {
+      "opcode": 351,
+      "mnemonic": "BIT 3,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 3,A"
+    },
+    {
+      "opcode": 352,
+      "mnemonic": "BIT 4,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 4,B"
+    },
+    {
+      "opcode": 353,
+      "mnemonic": "BIT 4,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 4,C"
+    },
+    {
+      "opcode": 354,
+      "mnemonic": "BIT 4,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 4,D"
+    },
+    {
+      "opcode": 355,
+      "mnemonic": "BIT 4,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 4,E"
+    },
+    {
+      "opcode": 356,
+      "mnemonic": "BIT 4,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 4,H"
+    },
+    {
+      "opcode": 357,
+      "mnemonic": "BIT 4,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 4,L"
+    },
+    {
+      "opcode": 358,
+      "mnemonic": "BIT 4,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 1 -",
+      "format": "BIT 4,(HL)"
+    },
+    {
+      "opcode": 359,
+      "mnemonic": "BIT 4,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 4,A"
+    },
+    {
+      "opcode": 360,
+      "mnemonic": "BIT 5,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 5,B"
+    },
+    {
+      "opcode": 361,
+      "mnemonic": "BIT 5,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 5,C"
+    },
+    {
+      "opcode": 362,
+      "mnemonic": "BIT 5,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 5,D"
+    },
+    {
+      "opcode": 363,
+      "mnemonic": "BIT 5,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 5,E"
+    },
+    {
+      "opcode": 364,
+      "mnemonic": "BIT 5,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 5,H"
+    },
+    {
+      "opcode": 365,
+      "mnemonic": "BIT 5,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 5,L"
+    },
+    {
+      "opcode": 366,
+      "mnemonic": "BIT 5,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 1 -",
+      "format": "BIT 5,(HL)"
+    },
+    {
+      "opcode": 367,
+      "mnemonic": "BIT 5,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 5,A"
+    },
+    {
+      "opcode": 368,
+      "mnemonic": "BIT 6,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 6,B"
+    },
+    {
+      "opcode": 369,
+      "mnemonic": "BIT 6,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 6,C"
+    },
+    {
+      "opcode": 370,
+      "mnemonic": "BIT 6,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 6,D"
+    },
+    {
+      "opcode": 371,
+      "mnemonic": "BIT 6,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 6,E"
+    },
+    {
+      "opcode": 372,
+      "mnemonic": "BIT 6,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 6,H"
+    },
+    {
+      "opcode": 373,
+      "mnemonic": "BIT 6,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 6,L"
+    },
+    {
+      "opcode": 374,
+      "mnemonic": "BIT 6,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 1 -",
+      "format": "BIT 6,(HL)"
+    },
+    {
+      "opcode": 375,
+      "mnemonic": "BIT 6,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 6,A"
+    },
+    {
+      "opcode": 376,
+      "mnemonic": "BIT 7,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 7,B"
+    },
+    {
+      "opcode": 377,
+      "mnemonic": "BIT 7,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 7,C"
+    },
+    {
+      "opcode": 378,
+      "mnemonic": "BIT 7,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 7,D"
+    },
+    {
+      "opcode": 379,
+      "mnemonic": "BIT 7,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 7,E"
+    },
+    {
+      "opcode": 380,
+      "mnemonic": "BIT 7,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 7,H"
+    },
+    {
+      "opcode": 381,
+      "mnemonic": "BIT 7,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 7,L"
+    },
+    {
+      "opcode": 382,
+      "mnemonic": "BIT 7,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "Z 0 1 -",
+      "format": "BIT 7,(HL)"
+    },
+    {
+      "opcode": 383,
+      "mnemonic": "BIT 7,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "Z 0 1 -",
+      "format": "BIT 7,A"
+    },
+    {
+      "opcode": 384,
+      "mnemonic": "RES 0,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 0,B"
+    },
+    {
+      "opcode": 385,
+      "mnemonic": "RES 0,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 0,C"
+    },
+    {
+      "opcode": 386,
+      "mnemonic": "RES 0,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 0,D"
+    },
+    {
+      "opcode": 387,
+      "mnemonic": "RES 0,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 0,E"
+    },
+    {
+      "opcode": 388,
+      "mnemonic": "RES 0,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 0,H"
+    },
+    {
+      "opcode": 389,
+      "mnemonic": "RES 0,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 0,L"
+    },
+    {
+      "opcode": 390,
+      "mnemonic": "RES 0,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "RES 0,(HL)"
+    },
+    {
+      "opcode": 391,
+      "mnemonic": "RES 0,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 0,A"
+    },
+    {
+      "opcode": 392,
+      "mnemonic": "RES 1,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 1,B"
+    },
+    {
+      "opcode": 393,
+      "mnemonic": "RES 1,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 1,C"
+    },
+    {
+      "opcode": 394,
+      "mnemonic": "RES 1,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 1,D"
+    },
+    {
+      "opcode": 395,
+      "mnemonic": "RES 1,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 1,E"
+    },
+    {
+      "opcode": 396,
+      "mnemonic": "RES 1,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 1,H"
+    },
+    {
+      "opcode": 397,
+      "mnemonic": "RES 1,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 1,L"
+    },
+    {
+      "opcode": 398,
+      "mnemonic": "RES 1,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "RES 1,(HL)"
+    },
+    {
+      "opcode": 399,
+      "mnemonic": "RES 1,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 1,A"
+    },
+    {
+      "opcode": 400,
+      "mnemonic": "RES 2,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 2,B"
+    },
+    {
+      "opcode": 401,
+      "mnemonic": "RES 2,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 2,C"
+    },
+    {
+      "opcode": 402,
+      "mnemonic": "RES 2,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 2,D"
+    },
+    {
+      "opcode": 403,
+      "mnemonic": "RES 2,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 2,E"
+    },
+    {
+      "opcode": 404,
+      "mnemonic": "RES 2,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 2,H"
+    },
+    {
+      "opcode": 405,
+      "mnemonic": "RES 2,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 2,L"
+    },
+    {
+      "opcode": 406,
+      "mnemonic": "RES 2,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "RES 2,(HL)"
+    },
+    {
+      "opcode": 407,
+      "mnemonic": "RES 2,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 2,A"
+    },
+    {
+      "opcode": 408,
+      "mnemonic": "RES 3,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 3,B"
+    },
+    {
+      "opcode": 409,
+      "mnemonic": "RES 3,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 3,C"
+    },
+    {
+      "opcode": 410,
+      "mnemonic": "RES 3,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 3,D"
+    },
+    {
+      "opcode": 411,
+      "mnemonic": "RES 3,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 3,E"
+    },
+    {
+      "opcode": 412,
+      "mnemonic": "RES 3,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 3,H"
+    },
+    {
+      "opcode": 413,
+      "mnemonic": "RES 3,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 3,L"
+    },
+    {
+      "opcode": 414,
+      "mnemonic": "RES 3,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "RES 3,(HL)"
+    },
+    {
+      "opcode": 415,
+      "mnemonic": "RES 3,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 3,A"
+    },
+    {
+      "opcode": 416,
+      "mnemonic": "RES 4,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 4,B"
+    },
+    {
+      "opcode": 417,
+      "mnemonic": "RES 4,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 4,C"
+    },
+    {
+      "opcode": 418,
+      "mnemonic": "RES 4,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 4,D"
+    },
+    {
+      "opcode": 419,
+      "mnemonic": "RES 4,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 4,E"
+    },
+    {
+      "opcode": 420,
+      "mnemonic": "RES 4,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 4,H"
+    },
+    {
+      "opcode": 421,
+      "mnemonic": "RES 4,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 4,L"
+    },
+    {
+      "opcode": 422,
+      "mnemonic": "RES 4,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "RES 4,(HL)"
+    },
+    {
+      "opcode": 423,
+      "mnemonic": "RES 4,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 4,A"
+    },
+    {
+      "opcode": 424,
+      "mnemonic": "RES 5,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 5,B"
+    },
+    {
+      "opcode": 425,
+      "mnemonic": "RES 5,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 5,C"
+    },
+    {
+      "opcode": 426,
+      "mnemonic": "RES 5,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 5,D"
+    },
+    {
+      "opcode": 427,
+      "mnemonic": "RES 5,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 5,E"
+    },
+    {
+      "opcode": 428,
+      "mnemonic": "RES 5,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 5,H"
+    },
+    {
+      "opcode": 429,
+      "mnemonic": "RES 5,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 5,L"
+    },
+    {
+      "opcode": 430,
+      "mnemonic": "RES 5,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "RES 5,(HL)"
+    },
+    {
+      "opcode": 431,
+      "mnemonic": "RES 5,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 5,A"
+    },
+    {
+      "opcode": 432,
+      "mnemonic": "RES 6,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 6,B"
+    },
+    {
+      "opcode": 433,
+      "mnemonic": "RES 6,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 6,C"
+    },
+    {
+      "opcode": 434,
+      "mnemonic": "RES 6,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 6,D"
+    },
+    {
+      "opcode": 435,
+      "mnemonic": "RES 6,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 6,E"
+    },
+    {
+      "opcode": 436,
+      "mnemonic": "RES 6,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 6,H"
+    },
+    {
+      "opcode": 437,
+      "mnemonic": "RES 6,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 6,L"
+    },
+    {
+      "opcode": 438,
+      "mnemonic": "RES 6,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "RES 6,(HL)"
+    },
+    {
+      "opcode": 439,
+      "mnemonic": "RES 6,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 6,A"
+    },
+    {
+      "opcode": 440,
+      "mnemonic": "RES 7,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 7,B"
+    },
+    {
+      "opcode": 441,
+      "mnemonic": "RES 7,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 7,C"
+    },
+    {
+      "opcode": 442,
+      "mnemonic": "RES 7,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 7,D"
+    },
+    {
+      "opcode": 443,
+      "mnemonic": "RES 7,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 7,E"
+    },
+    {
+      "opcode": 444,
+      "mnemonic": "RES 7,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 7,H"
+    },
+    {
+      "opcode": 445,
+      "mnemonic": "RES 7,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 7,L"
+    },
+    {
+      "opcode": 446,
+      "mnemonic": "RES 7,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "RES 7,(HL)"
+    },
+    {
+      "opcode": 447,
+      "mnemonic": "RES 7,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "RES 7,A"
+    },
+    {
+      "opcode": 448,
+      "mnemonic": "SET 0,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 0,B"
+    },
+    {
+      "opcode": 449,
+      "mnemonic": "SET 0,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 0,C"
+    },
+    {
+      "opcode": 450,
+      "mnemonic": "SET 0,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 0,D"
+    },
+    {
+      "opcode": 451,
+      "mnemonic": "SET 0,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 0,E"
+    },
+    {
+      "opcode": 452,
+      "mnemonic": "SET 0,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 0,H"
+    },
+    {
+      "opcode": 453,
+      "mnemonic": "SET 0,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 0,L"
+    },
+    {
+      "opcode": 454,
+      "mnemonic": "SET 0,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "SET 0,(HL)"
+    },
+    {
+      "opcode": 455,
+      "mnemonic": "SET 0,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 0,A"
+    },
+    {
+      "opcode": 456,
+      "mnemonic": "SET 1,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 1,B"
+    },
+    {
+      "opcode": 457,
+      "mnemonic": "SET 1,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 1,C"
+    },
+    {
+      "opcode": 458,
+      "mnemonic": "SET 1,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 1,D"
+    },
+    {
+      "opcode": 459,
+      "mnemonic": "SET 1,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 1,E"
+    },
+    {
+      "opcode": 460,
+      "mnemonic": "SET 1,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 1,H"
+    },
+    {
+      "opcode": 461,
+      "mnemonic": "SET 1,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 1,L"
+    },
+    {
+      "opcode": 462,
+      "mnemonic": "SET 1,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "SET 1,(HL)"
+    },
+    {
+      "opcode": 463,
+      "mnemonic": "SET 1,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 1,A"
+    },
+    {
+      "opcode": 464,
+      "mnemonic": "SET 2,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 2,B"
+    },
+    {
+      "opcode": 465,
+      "mnemonic": "SET 2,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 2,C"
+    },
+    {
+      "opcode": 466,
+      "mnemonic": "SET 2,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 2,D"
+    },
+    {
+      "opcode": 467,
+      "mnemonic": "SET 2,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 2,E"
+    },
+    {
+      "opcode": 468,
+      "mnemonic": "SET 2,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 2,H"
+    },
+    {
+      "opcode": 469,
+      "mnemonic": "SET 2,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 2,L"
+    },
+    {
+      "opcode": 470,
+      "mnemonic": "SET 2,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "SET 2,(HL)"
+    },
+    {
+      "opcode": 471,
+      "mnemonic": "SET 2,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 2,A"
+    },
+    {
+      "opcode": 472,
+      "mnemonic": "SET 3,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 3,B"
+    },
+    {
+      "opcode": 473,
+      "mnemonic": "SET 3,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 3,C"
+    },
+    {
+      "opcode": 474,
+      "mnemonic": "SET 3,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 3,D"
+    },
+    {
+      "opcode": 475,
+      "mnemonic": "SET 3,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 3,E"
+    },
+    {
+      "opcode": 476,
+      "mnemonic": "SET 3,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 3,H"
+    },
+    {
+      "opcode": 477,
+      "mnemonic": "SET 3,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 3,L"
+    },
+    {
+      "opcode": 478,
+      "mnemonic": "SET 3,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "SET 3,(HL)"
+    },
+    {
+      "opcode": 479,
+      "mnemonic": "SET 3,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 3,A"
+    },
+    {
+      "opcode": 480,
+      "mnemonic": "SET 4,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 4,B"
+    },
+    {
+      "opcode": 481,
+      "mnemonic": "SET 4,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 4,C"
+    },
+    {
+      "opcode": 482,
+      "mnemonic": "SET 4,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 4,D"
+    },
+    {
+      "opcode": 483,
+      "mnemonic": "SET 4,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 4,E"
+    },
+    {
+      "opcode": 484,
+      "mnemonic": "SET 4,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 4,H"
+    },
+    {
+      "opcode": 485,
+      "mnemonic": "SET 4,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 4,L"
+    },
+    {
+      "opcode": 486,
+      "mnemonic": "SET 4,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "SET 4,(HL)"
+    },
+    {
+      "opcode": 487,
+      "mnemonic": "SET 4,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 4,A"
+    },
+    {
+      "opcode": 488,
+      "mnemonic": "SET 5,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 5,B"
+    },
+    {
+      "opcode": 489,
+      "mnemonic": "SET 5,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 5,C"
+    },
+    {
+      "opcode": 490,
+      "mnemonic": "SET 5,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 5,D"
+    },
+    {
+      "opcode": 491,
+      "mnemonic": "SET 5,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 5,E"
+    },
+    {
+      "opcode": 492,
+      "mnemonic": "SET 5,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 5,H"
+    },
+    {
+      "opcode": 493,
+      "mnemonic": "SET 5,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 5,L"
+    },
+    {
+      "opcode": 494,
+      "mnemonic": "SET 5,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "SET 5,(HL)"
+    },
+    {
+      "opcode": 495,
+      "mnemonic": "SET 5,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 5,A"
+    },
+    {
+      "opcode": 496,
+      "mnemonic": "SET 6,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 6,B"
+    },
+    {
+      "opcode": 497,
+      "mnemonic": "SET 6,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 6,C"
+    },
+    {
+      "opcode": 498,
+      "mnemonic": "SET 6,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 6,D"
+    },
+    {
+      "opcode": 499,
+      "mnemonic": "SET 6,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 6,E"
+    },
+    {
+      "opcode": 500,
+      "mnemonic": "SET 6,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 6,H"
+    },
+    {
+      "opcode": 501,
+      "mnemonic": "SET 6,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 6,L"
+    },
+    {
+      "opcode": 502,
+      "mnemonic": "SET 6,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "SET 6,(HL)"
+    },
+    {
+      "opcode": 503,
+      "mnemonic": "SET 6,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 6,A"
+    },
+    {
+      "opcode": 504,
+      "mnemonic": "SET 7,B",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 7,B"
+    },
+    {
+      "opcode": 505,
+      "mnemonic": "SET 7,C",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 7,C"
+    },
+    {
+      "opcode": 506,
+      "mnemonic": "SET 7,D",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 7,D"
+    },
+    {
+      "opcode": 507,
+      "mnemonic": "SET 7,E",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 7,E"
+    },
+    {
+      "opcode": 508,
+      "mnemonic": "SET 7,H",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 7,H"
+    },
+    {
+      "opcode": 509,
+      "mnemonic": "SET 7,L",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 7,L"
+    },
+    {
+      "opcode": 510,
+      "mnemonic": "SET 7,(HL)",
+      "length": 1,
+      "cycles": 12,
+      "flags": "- - - -",
+      "format": "SET 7,(HL)"
+    },
+    {
+      "opcode": 511,
+      "mnemonic": "SET 7,A",
+      "length": 1,
+      "cycles": 4,
+      "flags": "- - - -",
+      "format": "SET 7,A"
+    }
+  ]

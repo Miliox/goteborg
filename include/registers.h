@@ -70,7 +70,7 @@ public:
 
     u8  ime;   // interrupt master enabled
 
-    Registers() : af(0), bc(0), de(0), hl(0), sp(0), pc(0), ime(0) {}
+    Registers() : af(0xff), bc(0xff), de(0xff), hl(0xff), sp(0xff), pc(0), ime(0) {}
 };
 
 } // namespace goteborg

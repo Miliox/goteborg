@@ -21,7 +21,6 @@ public:
     void step(u8 ticks) override;
     void transfer(addr_t dst, addr_t src) override;
     void write(addr_t dst, u8 value) override;
-
     void write(addr_t dst, const buffer_t& data);
 
 private:

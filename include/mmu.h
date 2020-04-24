@@ -33,7 +33,7 @@ public:
     /**
      * Execute internal dma transfer
      */
-    virtual void step(u8 ticks) = 0;
+    virtual void step(ticks_t ticks) = 0;
 
     /**
      * Begin DMA transfer 

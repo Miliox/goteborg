@@ -19,7 +19,7 @@ public:
 
     u8 read(addr_t src) override;
 
-    void step(u8 ticks) override;
+    void step(ticks_t ticks) override;
     void transfer(addr_t dst, addr_t src) override;
     void write(addr_t dst, u8 value) override;
     void write(addr_t dst, const buffer_t& data);
@@ -36,6 +36,9 @@ private:
     buffer_t oram_; // object attribute memory
     buffer_t hwio_; // hardware io
     buffer_t hram_; // high ram (zero memory)
+
+    ticks_t timer_;
+    ticks_t divider_;
 };
 
 }

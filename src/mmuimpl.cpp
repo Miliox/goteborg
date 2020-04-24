@@ -6,6 +6,7 @@
  */
 
 #include "mmuimpl.h"
+#include "interrupt.h"
 
 #include <algorithm>
 #include <cmath>
@@ -16,29 +17,29 @@
 using namespace gbg;
 
 namespace MemAddr {
-    const addr_t kBiosROM      = 0x0000;
-    const addr_t kCartridgeROM = 0x0000;
-    const addr_t kVideoRAM     = 0x8000;
-    const addr_t kCartridgeRAM = 0xA000;
-    const addr_t kLowRAM       = 0xC000;
-    const addr_t kEchoRAM      = 0xE000;
-    const addr_t kOamRAM       = 0xFE00;
-    const addr_t kInvRAM       = 0xFEA0;
-    const addr_t kHwIO         = 0xFF00;
-    const addr_t kHighRAM      = 0xFF80;
+    static const addr_t kBiosROM      = 0x0000;
+    static const addr_t kCartridgeROM = 0x0000;
+    static const addr_t kVideoRAM     = 0x8000;
+    static const addr_t kCartridgeRAM = 0xA000;
+    static const addr_t kLowRAM       = 0xC000;
+    static const addr_t kEchoRAM      = 0xE000;
+    static const addr_t kOamRAM       = 0xFE00;
+    static const addr_t kInvRAM       = 0xFEA0;
+    static const addr_t kHwIO         = 0xFF00;
+    static const addr_t kHighRAM      = 0xFF80;
 }
 
 namespace MemSize {
-    const size_t kBiosROM      = 0x0100;
-    const size_t kCartridgeROM = 0x8000;
-    const size_t kVideoRAM     = 0x2000;
-    const size_t kCartridgeRAM = 0x2000;
-    const size_t kLowRAM       = 0x2000;
-    const size_t kEchoRAM      = 0x1E00;
-    const size_t kOamRAM       = 0x00A0;
-    const size_t kInvRAM       = 0x0060;
-    const size_t kHwIO         = 0x0080;
-    const size_t kHighRAM      = 0x0080;
+    static const size_t kBiosROM      = 0x0100;
+    static const size_t kCartridgeROM = 0x8000;
+    static const size_t kVideoRAM     = 0x2000;
+    static const size_t kCartridgeRAM = 0x2000;
+    static const size_t kLowRAM       = 0x2000;
+    static const size_t kEchoRAM      = 0x1E00;
+    static const size_t kOamRAM       = 0x00A0;
+    static const size_t kInvRAM       = 0x0060;
+    static const size_t kHwIO         = 0x0080;
+    static const size_t kHighRAM      = 0x0080;
 }
 
 static_assert(MemAddr::kBiosROM == 0, "bios should be at start of address space");
@@ -63,8 +64,10 @@ MMUImpl::MMUImpl() : MMU(),
     cram_(MemSize::kCartridgeRAM, 0xff),
     lram_(MemSize::kLowRAM, 0xff),
     oram_(MemSize::kOamRAM, 0xff),
-    hwio_(MemSize::kHwIO, 0xff),
-    hram_(MemSize::kHighRAM, 0xff) {
+    hwio_(MemSize::kHwIO, 0),
+    hram_(MemSize::kHighRAM, 0xff),
+    timer_(0),
+    divider_(0) {
 
 }
 
@@ -146,9 +149,55 @@ u8 MMUImpl::read(addr_t src) {
     return 0xff;
 }
 
-void MMUImpl::step(u8 ticks) {
+static const ticks_t kTimerFrequencies[4] = {4096, 262144, 65536, 16384};
+
+static const ticks_t kTimerDuration[4] = {
+    kClockRate / kTimerFrequencies[0],
+    kClockRate / kTimerFrequencies[1],
+    kClockRate / kTimerFrequencies[2],
+    kClockRate / kTimerFrequencies[3]
+};
+
+static const ticks_t kDividerDuration = 16384;
+
+static const u8 kHwIoIndexTimerDivider = 0x04;
+static const u8 kHwIoIndexTimerCounter = 0x05;
+static const u8 kHwIoIndexTimerModulo  = 0x06;
+static const u8 kHwIoIndexTimerControl = 0x07;
+static const u8 kHwIoIndexInterruptFlag = 0x0f;
+
+static const u8 kTimerControlStartFlag = 0x04;
+static const u8 kTimerControlClockSelectMask = 0x03;
+
+void MMUImpl::step(ticks_t ticks) {
     // Todo: DMA
-    // Todo: Timer
+
+    // Divider
+    divider_ += ticks;
+    if (divider_ >= kDividerDuration) {
+        divider_ -= kDividerDuration;
+        hwio_[kHwIoIndexTimerDivider] += 1;
+    }
+
+    // Timer
+    u8 timerControl = hwio_[kHwIoIndexTimerControl];
+    u8 timerRunning = timerControl & kTimerControlStartFlag;
+    if (timerRunning) {
+        u8 clockSelect = timerControl & kTimerControlClockSelectMask;
+
+        timer_ += ticks;
+        if (timer_ >= kTimerDuration[clockSelect]) {
+            timer_ -= kTimerDuration[clockSelect];
+            hwio_[kHwIoIndexTimerCounter] += 1;
+
+            if (hwio_[kHwIoIndexTimerCounter] == 0) {
+                hwio_[kHwIoIndexInterruptFlag] |= kTimerOverflowInterrupt;
+                hwio_[kHwIoIndexTimerCounter] = hwio_[kHwIoIndexTimerModulo];
+            }
+        }
+    } else {
+        timer_ = 0;
+    }
 }
 
 void MMUImpl::transfer(addr_t dst, addr_t src) {
@@ -214,6 +263,11 @@ void MMUImpl::write(addr_t dst, u8 value) {
 
     if (dst < (MemAddr::kHwIO + MemSize::kHwIO)) {
         dst -= MemAddr::kHwIO;
+        if (dst == kHwIoIndexTimerDivider) {
+            hwio_.at(dst) = 0;
+            return;
+        }
+
         hwio_.at(dst) = value;
         return;
     }

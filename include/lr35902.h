@@ -19,10 +19,6 @@ namespace gbg {
 class MMU;
 class Registers;
 
-const u64 kClockRate = 4'194'304;       // Classic Gameboy
-const u64 kSuperClockRate = 4'295'454;  // Super Gameboy
-const u64 kColorClockRate = 8'388'608;  // Gameboy Color
-
 /**
  * SHARP LR35902 (Gameboy CPU)
  *

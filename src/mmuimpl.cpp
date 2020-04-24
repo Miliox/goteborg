@@ -8,76 +8,213 @@
 #include "mmuimpl.h"
 
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <iomanip>
+#include <utility>
 
 using namespace gbg;
 
+namespace MemAddr {
+    const addr_t kBiosROM      = 0x0000;
+    const addr_t kCartridgeROM = 0x0000;
+    const addr_t kVideoRAM     = 0x8000;
+    const addr_t kCartridgeRAM = 0xA000;
+    const addr_t kLowRAM       = 0xC000;
+    const addr_t kEchoRAM      = 0xE000;
+    const addr_t kOamRAM       = 0xFE00;
+    const addr_t kInvRAM       = 0xFEA0;
+    const addr_t kHwIO         = 0xFF00;
+    const addr_t kHighRAM      = 0xFF80;
+}
 
-MMUImpl::MMUImpl() : MMU(), mem(1 << 16, (1 << 8) - 1) {
+namespace MemSize {
+    const size_t kBiosROM      = 0x0100;
+    const size_t kCartridgeROM = 0x8000;
+    const size_t kVideoRAM     = 0x2000;
+    const size_t kCartridgeRAM = 0x2000;
+    const size_t kLowRAM       = 0x2000;
+    const size_t kEchoRAM      = 0x1E00;
+    const size_t kOamRAM       = 0x00A0;
+    const size_t kInvRAM       = 0x0060;
+    const size_t kHwIO         = 0x0080;
+    const size_t kHighRAM      = 0x0080;
+}
+
+static_assert(MemAddr::kBiosROM == 0, "bios should be at start of address space");
+static_assert((MemAddr::kBiosROM + MemSize::kBiosROM) == 0x100, "bios must be 256 bytes long");
+
+static_assert(MemAddr::kBiosROM == 0);
+static_assert(MemAddr::kCartridgeROM == MemAddr::kBiosROM);
+static_assert((MemAddr::kCartridgeROM + MemSize::kCartridgeROM) == MemAddr::kVideoRAM);
+static_assert((MemAddr::kVideoRAM     + MemSize::kVideoRAM)     == MemAddr::kCartridgeRAM);
+static_assert((MemAddr::kCartridgeRAM + MemSize::kCartridgeRAM) == MemAddr::kLowRAM);
+static_assert((MemAddr::kLowRAM       + MemSize::kLowRAM)       == MemAddr::kEchoRAM);
+static_assert((MemAddr::kEchoRAM      + MemSize::kEchoRAM)      == MemAddr::kOamRAM);
+static_assert((MemAddr::kOamRAM       + MemSize::kOamRAM)       == MemAddr::kInvRAM);
+static_assert((MemAddr::kInvRAM       + MemSize::kInvRAM)       == MemAddr::kHwIO);
+static_assert((MemAddr::kHwIO         + MemSize::kHwIO)         == MemAddr::kHighRAM);
+static_assert((MemAddr::kHighRAM      + MemSize::kHighRAM)      == 0x10000);
+
+MMUImpl::MMUImpl() : MMU(),
+    bios_(MemSize::kBiosROM, 0xff),
+    crom_(MemSize::kCartridgeROM, 0xff),
+    vram_(MemSize::kVideoRAM, 0xff),
+    cram_(MemSize::kCartridgeRAM, 0xff),
+    lram_(MemSize::kLowRAM, 0xff),
+    oram_(MemSize::kOamRAM, 0xff),
+    hwio_(MemSize::kHwIO, 0xff),
+    hram_(MemSize::kHighRAM, 0xff) {
 
 }
 
-MMUImpl::~MMUImpl() {
+void MMUImpl::loadBios(const buffer_t& bios) {
+    if (bios.size() != 256) {
+        throw std::runtime_error("bios must be 256 bytes long");
+    }
 
+    bios_ = bios;
+}
+
+void MMUImpl::loadCartridge(const buffer_t& rom) {
+    auto result = div(rom.size(), 32 * 1024);
+    if (rom.size() == 0 && result.rem != 0) {
+        throw std::runtime_error("cartridge rom must be multiple of 32Kb");
+    }
+    crom_ = rom;
 }
 
 u8 MMUImpl::read(addr_t src) {
-    src = resolve(src);
-    return mem.at(src);
-}
-
-addr_t MMUImpl::resolve(addr_t a) {
-    /*
-    $FFFF             Interrupt Enable Flag
-    $FF80-$FFFE     Zero Page - 127 bytes
-    $FF00-$FF7F     Hardware I/O Registers
-    $FEA0-$FEFF     Unusable Memory
-    $FE00-$FE9F     OAM - Object Attribute Memory
-    $E000-$FDFF     Echo RAM - Reserved, Do Not Use
-    $D000-$DFFF     Internal RAM - Bank 1-7 (switchable - CGB only)
-    $C000-$CFFF     Internal RAM - Bank 0 (fixed)
-    $A000-$BFFF     Cartridge RAM (If Available)
-    $9C00-$9FFF     BG Map Data 2
-    $9800-$9BFF     BG Map Data 1
-    $8000-$97FF     Character RAM
-    $4000-$7FFF     Cartridge ROM - Switchable Banks 1-xx
-    $0150-$3FFF     Cartridge ROM - Bank 0 (fixed)
-    $0100-$014F     Cartridge Header Area
-    $0000-$00FF     Restart and Interrupt Vectors
-    */
-
-    if (a >= 0xe000u && a <= 0xfdff) {
-        // ECHO RAM => Internal RAM
-        a -= 0xe000u;
-        a += 0xc000u;
+    if (src < (MemAddr::kBiosROM + MemSize::kBiosROM) && hwio_.at(0x50) != 1) {
+        src -= MemAddr::kBiosROM;
+        return bios_.at(src);
     }
 
-    return a;
+    static_assert(MemSize::kCartridgeRAM < MemAddr::kVideoRAM);
+
+    if (src < (MemAddr::kCartridgeROM + MemSize::kCartridgeROM)) {
+        src -= MemAddr::kCartridgeROM;
+        return crom_.at(src);
+    }
+
+    static_assert(MemSize::kVideoRAM < MemAddr::kCartridgeRAM);
+
+    if (src < (MemAddr::kVideoRAM + MemSize::kVideoRAM)) {
+        src -= MemAddr::kVideoRAM;
+        return vram_.at(src);
+    }
+
+    static_assert(MemAddr::kCartridgeRAM < MemAddr::kLowRAM);
+
+    if (src < (MemAddr::kCartridgeRAM + MemSize::kCartridgeRAM)) {
+        src -= MemAddr::kCartridgeRAM;
+        return cram_.at(src);
+    }
+
+    static_assert(MemAddr::kLowRAM < MemAddr::kEchoRAM);
+
+    if (src < (MemAddr::kLowRAM + MemSize::kLowRAM)) {
+        src -= MemAddr::kLowRAM;
+        return lram_.at(src);
+    }
+
+    static_assert(MemAddr::kEchoRAM < MemAddr::kOamRAM);
+
+    if (src < (MemAddr::kEchoRAM + MemSize::kEchoRAM)) {
+        src -= MemAddr::kEchoRAM;
+        return lram_.at(src);
+    }
+
+    static_assert(MemAddr::kOamRAM < MemAddr::kInvRAM);
+
+    if (src < (MemAddr::kOamRAM + MemSize::kOamRAM)) {
+        src -= MemAddr::kOamRAM;
+        return oram_.at(src);
+    }
+
+    static_assert(MemAddr::kInvRAM < MemAddr::kHwIO);
+
+    if (src < (MemAddr::kInvRAM + MemSize::kInvRAM)) {
+        return 0x00;
+    }
+
+    if (src < (MemAddr::kHwIO + MemSize::kHwIO)) {
+        src -= MemAddr::kHwIO;
+        return hwio_.at(src);
+    }
+
+    return 0xff;
 }
 
 void MMUImpl::step(u8 ticks) {
     // Todo: DMA
+    // Todo: Timer
 }
 
 void MMUImpl::transfer(addr_t dst, addr_t src) {
-    dst = resolve(dst);
-    src = resolve(src);
-
-    // Naive DMA
-    for (size_t i = 0; i < 160; i++) {
-        mem.at(dst + i) =  mem.at(src + i);
+    for (addr_t i = 0; i < 160; i++) {
+        write(dst + i, read(src + i));
     }
 }
 
 void MMUImpl::write(addr_t dst, u8 value) {
-    dst = resolve(dst);
-    mem.at(dst) = value;
-}
+    static_assert(MemSize::kCartridgeRAM < MemAddr::kVideoRAM);
 
-void MMUImpl::write(addr_t dst, const buffer_t& data) {
-    for (addr_t a = 0; a < data.size(); a++) {
-        auto aux = resolve(dst + a);
-        mem.at(aux) = data.at(a);
+    if (dst < (MemAddr::kCartridgeROM + MemSize::kCartridgeROM)) {
+        // read only
+        return;
+    }
+
+    static_assert(MemSize::kVideoRAM < MemAddr::kCartridgeRAM);
+
+    if (dst < (MemAddr::kVideoRAM + MemSize::kVideoRAM)) {
+        dst -= MemAddr::kVideoRAM;
+        vram_.at(dst) = value;
+        return;
+    }
+
+    static_assert(MemAddr::kCartridgeRAM < MemAddr::kLowRAM);
+
+    if (dst < (MemAddr::kCartridgeRAM + MemSize::kCartridgeRAM)) {
+        dst -= MemAddr::kCartridgeRAM;
+        cram_.at(dst) = value;
+        return;
+    }
+
+    static_assert(MemAddr::kLowRAM < MemAddr::kEchoRAM);
+
+    if (dst < (MemAddr::kLowRAM + MemSize::kLowRAM)) {
+        dst -= MemAddr::kLowRAM;
+        lram_.at(dst) = value;
+        return;
+    }
+
+    static_assert(MemAddr::kEchoRAM < MemAddr::kOamRAM);
+
+    if (dst < (MemAddr::kEchoRAM + MemSize::kEchoRAM)) {
+        dst -= MemAddr::kEchoRAM;
+        lram_.at(dst) = value;
+        return;
+    }
+
+    static_assert(MemAddr::kOamRAM < MemAddr::kInvRAM);
+
+    if (dst < (MemAddr::kOamRAM + MemSize::kOamRAM)) {
+        dst -= MemAddr::kOamRAM;
+        oram_.at(dst) = value;
+        return;
+    }
+
+    static_assert(MemAddr::kInvRAM < MemAddr::kHwIO);
+
+    if (dst < (MemAddr::kInvRAM + MemSize::kInvRAM)) {
+        // read only
+        return;
+    }
+
+    if (dst < (MemAddr::kHwIO + MemSize::kHwIO)) {
+        dst -= MemAddr::kHwIO;
+        hwio_.at(dst) = value;
+        return;
     }
 }

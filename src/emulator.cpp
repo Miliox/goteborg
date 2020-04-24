@@ -18,15 +18,31 @@ Emulator::Emulator(u8 fps) : mmu_(), gpu_(mmu_), cpu_(mmu_), counter_(0), frameD
 }
 
 void Emulator::reset() {
-    sf::FileInputStream bios;
-    if (!bios.open("bios.bin")) {
-        throw std::runtime_error("error: cannot load bios");
+    {
+        sf::FileInputStream file;
+
+        if (!file.open("bios.bin")) {
+            throw std::runtime_error("error: cannot load bios");
+        }
+
+        buffer_t bios(file.getSize(), 0xff);
+        file.read(bios.data(), bios.size());
+
+        mmu_.loadBios(bios);
     }
 
-    buffer_t data(bios.getSize(), 0xff);
-    bios.read(reinterpret_cast<void*>(&data.front()), data.size());
+    {
+        sf::FileInputStream file;
 
-    mmu_.write(0, data);
+        if (!file.open("cartridge.gb")) {
+            throw std::runtime_error("error: cannot load cartridge");
+        }
+
+        buffer_t cartridge(file.getSize(), 0xff);
+        file.read(cartridge.data(), cartridge.size());
+
+        mmu_.loadCartridge(cartridge);
+    }
 }
 
 void Emulator::render(sf::RenderTarget& renderer) {
@@ -37,7 +53,10 @@ void Emulator::nextFrame() {
     while (counter_ < frameDuration_) {
         auto t = cpu_.cycle();
         assert(t != 0 && "never halt");
+
+        mmu_.step(t);
         gpu_.step(t);
+
         counter_ += t;
     }
     counter_ -= frameDuration_;

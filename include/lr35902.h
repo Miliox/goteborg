@@ -14,7 +14,7 @@
 #include <iomanip>
 #include <sstream>
 
-namespace goteborg {
+namespace gbg {
 
 class MMU;
 class Registers;
@@ -627,6 +627,6 @@ private:
     ticks_t opcodeCBFF();
 };
 
-} // namespace goteborg
+} // namespace gbg
 
 #endif /* !LR35902_H */

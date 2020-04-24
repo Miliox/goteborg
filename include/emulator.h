@@ -9,24 +9,30 @@
 #define EMULATOR_H
 
 #include "common.h"
+
+#include "gpu.h"
 #include "lr35902.h"
 #include "mmuimpl.h"
 
-namespace goteborg {
+#include <SFML/Graphics/RenderTarget.hpp>
+
+namespace gbg {
 
 class Emulator {
 public:
-    Emulator();
+    Emulator(u8 fps);
 
+    void nextFrame();
     void reset();
-    ticks_t step();
-
-    LR35902& getCPU();
-    MMU&     getMMU();
+    void render(sf::RenderTarget& renderer);
 
 private:
-    MMUImpl mmu;
-    LR35902 cpu;
+    MMUImpl mmu_;
+    Gpu     gpu_;
+    LR35902 cpu_;
+
+    ticks_t counter_;
+    const ticks_t frameDuration_;
 };
 
 }

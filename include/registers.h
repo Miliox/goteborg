@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-namespace goteborg {
+namespace gbg {
 
 enum class Flags : u8 {
     ZERO   = 1 << 7,
@@ -73,6 +73,6 @@ public:
     Registers() : af(0xffff), bc(0xffff), de(0xffff), hl(0xffff), sp(0xffff), pc(0), ime(0) {}
 };
 
-} // namespace goteborg
+} // namespace gbg
 
 #endif /* !REGISTERS_H */

@@ -10,7 +10,7 @@
 
 #include "mmu.h"
 
-namespace goteborg {
+namespace gbg {
 
 class MMUImpl : public MMU {
 public:

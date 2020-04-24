@@ -8,8 +8,10 @@
 #include "mmuimpl.h"
 
 #include <algorithm>
+#include <iostream>
+#include <iomanip>
 
-using namespace goteborg;
+using namespace gbg;
 
 
 MMUImpl::MMUImpl() : MMU(), mem(1 << 16, (1 << 8) - 1) {

@@ -8,7 +8,7 @@
 #include "mmuimpl.h"
 #include "catch2/catch.hpp"
 
-using namespace goteborg;
+using namespace gbg;
 
 TEST_CASE("Simple store/load", "[MMUImpl]") {
     MMUImpl mmu;

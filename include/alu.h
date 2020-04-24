@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-namespace goteborg {
+namespace gbg {
 
 namespace alu {
 
@@ -73,6 +73,6 @@ void swap(u8& flags, u8& acc);
 
 } // namespace alu
 
-} // namespace goteborg
+} // namespace gbg
 
 #endif /* !ALU_H */

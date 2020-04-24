@@ -11,18 +11,10 @@
 
 #include <SFML/System/FileInputStream.hpp>
 
-using namespace goteborg;
+using namespace gbg;
 
-Emulator::Emulator() : mmu(), cpu(mmu) {
+Emulator::Emulator(u8 fps) : mmu_(), gpu_(mmu_), cpu_(mmu_), counter_(0), frameDuration_(kClockRate / fps) {
 
-}
-
-LR35902& Emulator::getCPU() {
-    return cpu;
-}
-
-MMU& Emulator::getMMU() {
-    return mmu;
 }
 
 void Emulator::reset() {
@@ -34,9 +26,19 @@ void Emulator::reset() {
     buffer_t data(bios.getSize(), 0xff);
     bios.read(reinterpret_cast<void*>(&data.front()), data.size());
 
-    mmu.write(0, data);
+    mmu_.write(0, data);
 }
 
-ticks_t Emulator::step() {
-    return cpu.cycle();
+void Emulator::render(sf::RenderTarget& renderer) {
+    gpu_.render(renderer);
+}
+
+void Emulator::nextFrame() {
+    while (counter_ < frameDuration_) {
+        auto t = cpu_.cycle();
+        assert(t != 0 && "never halt");
+        gpu_.step(t);
+        counter_ += t;
+    }
+    counter_ -= frameDuration_;
 }

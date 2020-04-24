@@ -7,7 +7,7 @@
 
 #include "alu.h"
 
-using namespace goteborg;
+using namespace gbg;
 
 const u8 alu::kFZ = 0b1000'0000;
 const u8 alu::kFN = 0b0100'0000;

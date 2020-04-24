@@ -10,7 +10,7 @@
 #include "alu.h"
 #include "mmu.h"
 
-using namespace goteborg;
+using namespace gbg;
 
 LR35902::LR35902(MMU& mmu) : regs(), mmu(mmu), iset_(512, &LR35902::notimpl) {
     populateInstructionSets();

@@ -14,6 +14,7 @@ conan_basic_setup()
 set(SOURCE
     ${SOURCE}
     src/alu.cpp
+    src/gpu.cpp
     src/lr35902.cpp
     src/mmuimpl.cpp
     src/emulator.cpp

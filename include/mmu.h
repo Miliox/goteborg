@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-namespace goteborg {
+namespace gbg {
 
 /**
  * Memory Management Unit
@@ -47,6 +47,6 @@ public:
 
 };
 
-} // namespace goteborg
+} // namespace gbg
 
 #endif /* !MMU_H */

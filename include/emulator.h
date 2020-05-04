@@ -12,6 +12,7 @@
 
 #include "gpu.h"
 #include "lr35902.h"
+#include "registers.h"
 #include "mmuimpl.h"
 
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -23,8 +24,13 @@ public:
     Emulator(u8 fps);
 
     void nextFrame();
+    ticks_t nextTicks();
+
     void reset();
     void render(sf::RenderTarget& renderer);
+
+    MMU& getMMU();
+    Registers& getRegisters();
 
 private:
     MMUImpl mmu_;

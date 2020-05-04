@@ -43,6 +43,24 @@ void Emulator::reset() {
 
         mmu_.loadCartridge(cartridge);
     }
+
+    addr_t blogo = 0x00a8;
+    addr_t clogo = 0x0104;
+    for (addr_t i = 0; i < 48; i++) {
+        auto bdata = mmu_.read(blogo + i);
+        auto cdata = mmu_.read(clogo + i);
+        if (bdata != cdata) {
+            throw std::runtime_error("error: logo mismatch");
+        }
+    }
+}
+
+MMU& Emulator::getMMU() {
+    return mmu_;
+}
+
+Registers& Emulator::getRegisters() {
+    return cpu_.regs;
 }
 
 void Emulator::render(sf::RenderTarget& renderer) {
@@ -52,7 +70,11 @@ void Emulator::render(sf::RenderTarget& renderer) {
 void Emulator::nextFrame() {
     while (counter_ < frameDuration_) {
         auto t = cpu_.cycle();
-        assert(t != 0 && "never halt");
+
+        if (t == 0) {
+            // halt
+            return;
+        }
 
         mmu_.step(t);
         gpu_.step(t);
@@ -60,4 +82,18 @@ void Emulator::nextFrame() {
         counter_ += t;
     }
     counter_ -= frameDuration_;
+}
+
+ticks_t Emulator::nextTicks() {
+    auto t = cpu_.cycle();
+
+    if (t == 0) {
+        // halt
+        return 0;
+    }
+
+    mmu_.step(t);
+    gpu_.step(t);
+
+    return t;
 }

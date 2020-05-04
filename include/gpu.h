@@ -58,6 +58,15 @@ private:
     void clearScanline(u8 scanline);
     void renderScanlineBackground(u8 scanline);
     void renderScanlineSprites(u8 scanline);
+
+    bool isBackgroundEnable();
+
+    addr_t getScrollX();
+    addr_t getScrollY();
+    addr_t getTileDataIndex(u8 line, u8 index);
+    addr_t getTileDataAddr();
+    addr_t getTileMapAddr();
+    addr_t getWindowTileIndex(u8 windowX, u8 windowY);
 };
 
 }

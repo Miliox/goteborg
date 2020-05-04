@@ -207,7 +207,7 @@ void alu::lcp(u8& flags, u8& acc, u8 arg) {
 }
 
 void alu::bit(u8& flags, u8& acc, u8 arg) {
-    bool z = acc & (1 << arg);
+    bool z = (acc & (1 << arg)) == 0;
 
     flags = cond_bitset(z, flags, alu::kFZ);
     flags = cond_bitset(0, flags, alu::kFN);

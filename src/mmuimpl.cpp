@@ -176,11 +176,11 @@ void MMUImpl::step(ticks_t ticks) {
     divider_ += ticks;
     if (divider_ >= kDividerDuration) {
         divider_ -= kDividerDuration;
-        hwio_[kHwIoIndexTimerDivider] += 1;
+        hwio_.at(kHwIoIndexTimerDivider) += 1;
     }
 
     // Timer
-    u8 timerControl = hwio_[kHwIoIndexTimerControl];
+    u8 timerControl = hwio_.at(kHwIoIndexTimerControl);
     u8 timerRunning = timerControl & kTimerControlStartFlag;
     if (timerRunning) {
         u8 clockSelect = timerControl & kTimerControlClockSelectMask;
@@ -188,11 +188,11 @@ void MMUImpl::step(ticks_t ticks) {
         timer_ += ticks;
         if (timer_ >= kTimerDuration[clockSelect]) {
             timer_ -= kTimerDuration[clockSelect];
-            hwio_[kHwIoIndexTimerCounter] += 1;
+            hwio_.at(kHwIoIndexTimerCounter) += 1;
 
-            if (hwio_[kHwIoIndexTimerCounter] == 0) {
-                hwio_[kHwIoIndexInterruptFlag] |= kTimerOverflowInterrupt;
-                hwio_[kHwIoIndexTimerCounter] = hwio_[kHwIoIndexTimerModulo];
+            if (hwio_.at(kHwIoIndexTimerCounter) == 0) {
+                hwio_.at(kHwIoIndexInterruptFlag) |= kTimerOverflowInterrupt;
+                hwio_.at(kHwIoIndexTimerCounter) = hwio_.at(kHwIoIndexTimerModulo);
             }
         }
     } else {
@@ -201,6 +201,7 @@ void MMUImpl::step(ticks_t ticks) {
 }
 
 void MMUImpl::transfer(addr_t dst, addr_t src) {
+    std::cout << "dma: src=" << std::hex << static_cast<u32>(src) << " dst=" << static_cast<u32>(dst) << "\n";
     for (addr_t i = 0; i < 160; i++) {
         write(dst + i, read(src + i));
     }
@@ -263,6 +264,7 @@ void MMUImpl::write(addr_t dst, u8 value) {
 
     if (dst < (MemAddr::kHwIO + MemSize::kHwIO)) {
         dst -= MemAddr::kHwIO;
+
         if (dst == kHwIoIndexTimerDivider) {
             hwio_.at(dst) = 0;
             return;

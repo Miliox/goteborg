@@ -10,6 +10,9 @@
 #include "alu.h"
 #include "mmu.h"
 
+#include <iomanip>
+#include <iostream>
+
 using namespace gbg;
 
 LR35902::LR35902(MMU& mmu) : regs(), mmu(mmu), iset_(512, &LR35902::notimpl) {

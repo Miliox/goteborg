@@ -245,59 +245,92 @@ void Gpu::clearScanline(u8 scanline) {
     }
 }
 
+bool Gpu::isBackgroundEnable() {
+    return mmu_.read(Address::HwIoLcdControl) & ControlFlags::kBackgroundDisplayEnable;
+}
+
+addr_t Gpu::getTileDataIndex(u8 line, u8 index) {
+    u8 dataIndex = (line % kTileHeight) * 2;
+
+    if (index < 128 || getTileDataAddr() == 0x8000) {
+        dataIndex += index * kTileSize;
+    } else {
+        dataIndex -= (static_cast<s8>(index) * kTileSize) * -1;
+    }
+
+    return dataIndex;
+}
+
+addr_t Gpu::getTileDataAddr() {
+    const u8 control = mmu_.read(Address::HwIoLcdControl);
+    if (control & ControlFlags::kBackgroundWindowTileDataSelect) {
+        return 0x8000;
+    }
+    return 0x9000;
+}
+
+addr_t Gpu::getTileMapAddr() {
+    const u8 control = mmu_.read(Address::HwIoLcdControl);
+    if (control & ControlFlags::kBackgroundTileMapDisplaySelect) {
+        return 0x9C00;
+    }
+    return 0x9800;
+}
+
+addr_t Gpu::getScrollX() {
+    return mmu_.read(Address::HwIoScrollX);
+}
+
+addr_t Gpu::getScrollY() {
+    return mmu_.read(Address::HwIoScrollY);
+}
+
+addr_t Gpu::getWindowTileIndex(u8 windowX, u8 windowY) {
+    addr_t windowTileIndex = 0;
+    windowTileIndex += static_cast<addr_t>(windowX / kTileWidth);
+    windowTileIndex += static_cast<addr_t>(windowY / kTileHeight) * kTilesPerRow;
+    return windowTileIndex;
+}
+
 void Gpu::renderScanlineBackground(u8 scanline) {
-    u8 control = mmu_.read(Address::HwIoLcdControl);
-
-    if ((control & ControlFlags::kBackgroundDisplayEnable) == 0) {
+    if (!isBackgroundEnable()) {
         return;
     }
 
-    u8 scrollY = mmu_.read(Address::HwIoScrollY);
-    u8 bgPalette = mmu_.read(Address::HwIoBackgroundPalette);
+    const u8 bgPalette = mmu_.read(Address::HwIoBackgroundPalette);
 
-    scanline += scrollY;
+    const addr_t dataAddr = getTileDataAddr();
+    const addr_t mapAddr = getTileMapAddr();
 
-    if (scanline >= kDisplayHeight) {
-        // off screen
-        return;
-    }
+    const u8 scrollX = getScrollX();
+    const u8 scrollY = getScrollY();
 
-    addr_t bgAddr = (control & ControlFlags::kBackgroundTileMapDisplaySelect) ? 0x9c00 : 0x9800;
+    const u8 screenY = scanline;
+    const u8 windowY = screenY + scrollY;
 
-    for (int column = 0; column < kDisplayWidth; column++) {
-        addr_t bgIndex = (scanline / kTileHeight) * kTilesPerRow;
-        bgIndex += (column / kTileWidth);
+    for (u8 screenX = 0; screenX < kDisplayWidth; screenX++) {
+        u8 windowX = screenX + scrollX;
+        u8 bgTileIndex = mmu_.read(mapAddr + getWindowTileIndex(windowX, windowY));
 
-        addr_t tileNumber = mmu_.read(bgAddr + bgIndex);
+        addr_t bgTileDataAddr = dataAddr + getTileDataIndex(windowY, bgTileIndex);
 
-        addr_t tileAddr = (control & ControlFlags::kBackgroundWindowTileDataSelect) ? 0x8000 : 0x9000;
+        uint8_t lsb = mmu_.read(bgTileDataAddr + 0);
+        uint8_t msb = mmu_.read(bgTileDataAddr + 1);
 
-        if (tileAddr == 0x9000 && tileNumber >= 128) {
-            tileNumber = (0xff - tileNumber) + 1;
-            tileAddr -= (tileNumber * 16);
-        } else {
-            tileAddr += (tileNumber * 16);
-        }
-        tileAddr += (scanline % kTileHeight) * 2;
+        size_t bitIndex = 7 - (screenX % 8);
 
-        uint8_t lsb = mmu_.read(tileAddr + 0);
-        uint8_t msb = mmu_.read(tileAddr + 1);
-
-        int bitIndex = 7 - (column % 8);
-
-        int palleteIndex = 0;
+        size_t palleteIndex = 0;
         palleteIndex += ((lsb >> bitIndex) & 0x01) ? 2 : 0;
         palleteIndex += ((msb >> bitIndex) & 0x01) ? 1 : 0;
 
         palleteIndex = (bgPalette >> (palleteIndex * 2)) & 0x3;
 
-        size_t pos = (column + (scanline * kDisplayWidth)) * kColorComponentSize;
+        size_t pos = (screenX + (scanline * kDisplayWidth)) * kColorComponentSize;
 
         for (size_t i = 0; i < kColorComponentSize; i++) {
             pixels_.at(pos + i) = palette_[palleteIndex][i];
         }
     }
-
 }
 
 void Gpu::renderScanlineSprites(u8 scanline) {

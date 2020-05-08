@@ -139,10 +139,19 @@ u8 MMUImpl::read(addr_t src) {
     return 0x00;
   }
 
+  static_assert(MemAddr::kHwIO < MemAddr::kHighRAM);
+
   if (src < (MemAddr::kHwIO + MemSize::kHwIO)) {
     src -= MemAddr::kHwIO;
     return hwio_.at(src);
   }
+
+  if (src) {
+    src -= MemAddr::kHighRAM;
+    return hram_.at(src);
+  }
+
+  assert(false);
 
   return 0xff;
 }
@@ -258,6 +267,8 @@ void MMUImpl::write(addr_t dst, u8 value) {
     return;
   }
 
+  static_assert(MemAddr::kHwIO < MemAddr::kHighRAM);
+
   if (dst < (MemAddr::kHwIO + MemSize::kHwIO)) {
     dst -= MemAddr::kHwIO;
 
@@ -269,4 +280,12 @@ void MMUImpl::write(addr_t dst, u8 value) {
     hwio_.at(dst) = value;
     return;
   }
+
+  if (dst) {
+    dst -= MemAddr::kHighRAM;
+    hram_.at(dst) = value;
+    return;
+  }
+
+  assert(false);
 }

@@ -147,10 +147,12 @@ void alu::sub16(u8& flags, u16& acc, u16 arg) {
 }
 
 void alu::inc16(u8& flags, u16& acc) {
+    UNUSED(flags);
     acc += 1;
 }
 
 void alu::dec16(u8& flags, u16& acc) {
+    UNUSED(flags);
     acc -= 1;
 }
 
@@ -216,14 +218,14 @@ void alu::bit(u8& flags, u8& acc, u8 arg) {
 }
 
 void alu::set(u8& flags, u8& acc, u8 arg) {
+    UNUSED(flags);
     u8 n = acc | (1 << arg);
-
     acc = n;
 }
 
 void alu::res(u8& flags, u8& acc, u8 arg) {
+    UNUSED(flags);
     u8 n = acc & ~(1 << arg);
-
     acc = n;
 }
 

@@ -2,13 +2,10 @@ cmake_minimum_required (VERSION 2.8)
 
 project(goteborg)
 
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-add_definitions('-g')
-add_definitions('-Wall')
-add_definitions('-Werror')
-add_definitions('-std=c++17')
+set(CMAKE_CXX_EXTENSIONS ON)
+add_compile_options(-Wall -Wextra -Werror)
 
 # Conan Package Manager Setup
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)

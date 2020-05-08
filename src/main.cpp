@@ -36,6 +36,7 @@ void setCurrentWorkingDirectory(const char* appName);
 nlohmann::json loadDisasmData();
 
 int main(int argc, char** argv) {
+    UNUSED(argc);
     setCurrentWorkingDirectory(argv[0]);
 
     auto disasm = loadDisasmData();

@@ -334,6 +334,7 @@ void Gpu::renderScanlineBackground(u8 scanline) {
 }
 
 void Gpu::renderScanlineSprites(u8 scanline) {
+    UNUSED(scanline);
     UNUSED(kTileSize);
     UNUSED(kTilesPerColumn);
     UNUSED(ControlFlags::kDisplayEnable);

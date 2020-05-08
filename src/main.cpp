@@ -5,10 +5,10 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "main.h"
-#include "address.h"
-#include "emulator.h"
-#include "alu.h"
+#include "main.hpp"
+#include "address.hpp"
+#include "emulator.hpp"
+#include "alu.hpp"
 
 #include <fstream>
 #include <iostream>

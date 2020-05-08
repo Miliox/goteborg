@@ -2,6 +2,9 @@ cmake_minimum_required (VERSION 2.8)
 
 project(goteborg)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 add_definitions('-g')
 add_definitions('-Wall')
 add_definitions('-Werror')
@@ -13,17 +16,17 @@ conan_basic_setup()
 
 set(SOURCE
     ${SOURCE}
-    include/address.h
-    include/alu.h
-    include/common.h
-    include/emulator.h
-    include/gpu.h
-    include/interrupt.h
-    include/lr35902.h
-    include/main.h
-    include/mmu.h
-    include/mmuimpl.h
-    include/registers.h
+    include/address.hpp
+    include/alu.hpp
+    include/common.hpp
+    include/emulator.hpp
+    include/gpu.hpp
+    include/interrupt.hpp
+    include/lr35902.hpp
+    include/main.hpp
+    include/mmu.hpp
+    include/mmuimpl.hpp
+    include/registers.hpp
 
     src/alu.cpp
     src/gpu.cpp

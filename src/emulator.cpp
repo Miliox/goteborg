@@ -5,7 +5,7 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "emulator.h"
+#include "emulator.hpp"
 
 #include <exception>
 

@@ -8,7 +8,7 @@
 #ifndef GPU_H
 #define GPU_H
 
-#include "common.h"
+#include "common.hpp"
 
 #include <memory>
 

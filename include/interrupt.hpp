@@ -8,7 +8,7 @@
 #ifndef INTERRUPT_H
 #define INTERRUPT_H
 
-#include "common.h"
+#include "common.hpp"
 
 namespace gbg {
 

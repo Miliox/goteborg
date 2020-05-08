@@ -8,7 +8,7 @@
 #ifndef ADDRESS_H
 #define ADDRESS_H
 
-#include "common.h"
+#include "common.hpp"
 
 namespace gbg {
 

@@ -8,7 +8,7 @@
 #ifndef REGISTERS_H
 #define REGISTERS_H
 
-#include "common.h"
+#include "common.hpp"
 
 namespace gbg {
 

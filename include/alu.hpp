@@ -8,7 +8,7 @@
 #ifndef ALU_H
 #define ALU_H
 
-#include "common.h"
+#include "common.hpp"
 
 namespace gbg {
 

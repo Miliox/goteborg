@@ -8,12 +8,12 @@
 #ifndef EMULATOR_H
 #define EMULATOR_H
 
-#include "common.h"
+#include "common.hpp"
 
-#include "gpu.h"
-#include "lr35902.h"
-#include "registers.h"
-#include "mmuimpl.h"
+#include "gpu.hpp"
+#include "lr35902.hpp"
+#include "registers.hpp"
+#include "mmuimpl.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 

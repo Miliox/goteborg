@@ -5,10 +5,10 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "lr35902.h"
+#include "lr35902.hpp"
 
-#include "alu.h"
-#include "mmu.h"
+#include "alu.hpp"
+#include "mmu.hpp"
 
 #include <iomanip>
 #include <iostream>

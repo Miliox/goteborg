@@ -5,11 +5,11 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "gpu.h"
+#include "gpu.hpp"
 
-#include "address.h"
-#include "interrupt.h"
-#include "mmu.h"
+#include "address.hpp"
+#include "interrupt.hpp"
+#include "mmu.hpp"
 
 #include <algorithm>
 #include <sstream>

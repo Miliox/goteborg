@@ -5,7 +5,7 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "alu.h"
+#include "alu.hpp"
 
 using namespace gbg;
 

@@ -5,7 +5,7 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "mmuimpl.h"
+#include "mmuimpl.hpp"
 #include "catch2/catch.hpp"
 
 using namespace gbg;

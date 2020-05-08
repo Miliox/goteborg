@@ -5,8 +5,8 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "mmuimpl.h"
-#include "interrupt.h"
+#include "mmuimpl.hpp"
+#include "interrupt.hpp"
 
 #include <algorithm>
 #include <cmath>

@@ -8,8 +8,8 @@
 #ifndef LR35902_H
 #define LR35902_H
 
-#include "common.h"
-#include "registers.h"
+#include "common.hpp"
+#include "registers.hpp"
 
 #include <iomanip>
 #include <sstream>

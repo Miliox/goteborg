@@ -8,7 +8,7 @@
 #ifndef MMU_H
 #define MMU_H
 
-#include "common.h"
+#include "common.hpp"
 
 namespace gbg {
 

@@ -8,39 +8,38 @@
 #ifndef EMULATOR_H
 #define EMULATOR_H
 
-#include "common.hpp"
+#include <SFML/Graphics/RenderTarget.hpp>
 
+#include "common.hpp"
 #include "gpu.hpp"
 #include "lr35902.hpp"
-#include "registers.hpp"
 #include "mmuimpl.hpp"
-
-#include <SFML/Graphics/RenderTarget.hpp>
+#include "registers.hpp"
 
 namespace gbg {
 
 class Emulator {
 public:
-    Emulator(u8 fps);
+  Emulator(u8 fps);
 
-    void nextFrame();
-    ticks_t nextTicks();
+  void nextFrame();
+  ticks_t nextTicks();
 
-    void reset();
-    void render(sf::RenderTarget& renderer);
+  void reset();
+  void render(sf::RenderTarget &renderer);
 
-    MMU& getMMU();
-    Registers& getRegisters();
+  MMU &getMMU();
+  Registers &getRegisters();
 
 private:
-    MMUImpl mmu_;
-    Gpu     gpu_;
-    LR35902 cpu_;
+  MMUImpl mmu_;
+  Gpu gpu_;
+  LR35902 cpu_;
 
-    ticks_t counter_;
-    const ticks_t frameDuration_;
+  ticks_t counter_;
+  const ticks_t frameDuration_;
 };
 
-}
+} // namespace gbg
 
 #endif /* !EMULATOR_H */

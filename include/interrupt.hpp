@@ -13,11 +13,11 @@
 namespace gbg {
 
 enum Interrupt : u8 {
-    kJoypadReleaseInterrupt = 1 << 4,
-    kSerialTransferCompleteInterrupt = 1 << 3,
-    kTimerOverflowInterrupt = 1 << 2,
-    kLcdControllerInterrupt = 1 << 1,
-    kLcdVerticalBlankingInterrupt = 1 << 0
+  kJoypadReleaseInterrupt = 1 << 4,
+  kSerialTransferCompleteInterrupt = 1 << 3,
+  kTimerOverflowInterrupt = 1 << 2,
+  kLcdControllerInterrupt = 1 << 1,
+  kLcdVerticalBlankingInterrupt = 1 << 0
 };
 
 }

@@ -5,22 +5,22 @@
  * Distributed under terms of the MIT license.
  */
 
-#include "mmuimpl.hpp"
 #include "catch2/catch.hpp"
+#include "mmuimpl.hpp"
 
 using namespace gbg;
 
 TEST_CASE("Simple store/load", "[MMUImpl]") {
-    MMUImpl mmu;
-    REQUIRE( mmu.read(0) == 255 );
-    REQUIRE( mmu.read(65'535) == 255 );
+  MMUImpl mmu;
+  REQUIRE(mmu.read(0) == 255);
+  REQUIRE(mmu.read(65'535) == 255);
 
-    mmu.write(65'535, 100 );
-    REQUIRE( mmu.read(65'535) == 100 );
+  mmu.write(65'535, 100);
+  REQUIRE(mmu.read(65'535) == 100);
 }
 
 TEST_CASE("Echo store/load", "[MMUImpl]") {
-    MMUImpl mmu;
-    mmu.write(0xe000, 100 );
-    REQUIRE( mmu.read(0xc000) == 100 );
+  MMUImpl mmu;
+  mmu.write(0xe000, 100);
+  REQUIRE(mmu.read(0xc000) == 100);
 }

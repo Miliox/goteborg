@@ -13,6 +13,18 @@ conan_basic_setup()
 
 set(SOURCE
     ${SOURCE}
+    include/address.h
+    include/alu.h
+    include/common.h
+    include/emulator.h
+    include/gpu.h
+    include/interrupt.h
+    include/lr35902.h
+    include/main.h
+    include/mmu.h
+    include/mmuimpl.h
+    include/registers.h
+
     src/alu.cpp
     src/gpu.cpp
     src/lr35902.cpp

@@ -86,6 +86,7 @@ set(TEST
 add_executable(${PROJECT_NAME}-test
     ${TEST}
     test/main.cpp
+    test/cpu-tests.cpp
     test/mmuimpl-tests.cpp
 )
 

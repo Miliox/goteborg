@@ -353,7 +353,8 @@ ticks_t LR35902::opcode18()
 {
   regs.pc++;
 
-  s32 aux = s32(regs.pc) + s8(next8());
+  s8 ref = next8();
+  s32 aux = s32(regs.pc) + ref;
 
   regs.pc = aux & 0xffff;
   return 12;
@@ -2106,7 +2107,9 @@ ticks_t LR35902::opcodeE8()
 {
   regs.pc++;
 
-  s32 aux = s32(regs.pc) + s8(next8());
+  s8 value = next8();
+
+  s32 aux = s32(regs.pc) + value;
 
   regs.pc = aux & 0xffff;
   return 16;
@@ -2232,8 +2235,8 @@ ticks_t LR35902::opcodeF7()
 ticks_t LR35902::opcodeF8()
 {
   regs.pc++;
-
-  s32 aux = s32(regs.sp) + s8(next8());
+  s8 value = next8();
+  s32 aux = s32(regs.sp) + value;
 
   regs.hl = aux & 0xffff;
   return 12;

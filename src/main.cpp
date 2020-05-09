@@ -15,7 +15,11 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <thread>
+#include <time.h>
 #include <unistd.h>
+
+using namespace std::chrono;
 
 #include <imgui-SFML.h>
 #include <imgui.h>
@@ -31,6 +35,7 @@
 #include <SFML/Window/Event.hpp>
 
 using namespace gbg;
+using namespace std::chrono;
 
 void setCurrentWorkingDirectory(const char *appName);
 nlohmann::json loadDisasmData();
@@ -43,14 +48,23 @@ int main(int argc, char **argv) {
 
   u8 frameRate = 60;
 
+  s32 lastFrameCount = 0;
+  s32 frameCounter = 0;
+  s64 currentSecond = 0;
+
   bool running = true;
 
   sf::RenderWindow window(sf::VideoMode(640, 480), "Goteborg");
-  window.setFramerateLimit(frameRate);
+  // window.setFramerateLimit(frameRate);
   ImGui::SFML::Init(window);
 
   Emulator emulator(frameRate);
   emulator.reset();
+
+  const auto kNanosPerFrame = nanoseconds(1'000'000'000 / frameRate);
+
+  auto lastTs = high_resolution_clock::now();
+  auto oversleep = nanoseconds(0);
 
   sf::Clock deltaClock;
   while (window.isOpen()) {
@@ -62,6 +76,20 @@ int main(int argc, char **argv) {
         emulator.nextTicks();
       }
 
+      if (event.type == sf::Event::KeyPressed &&
+          event.key.code == sf::Keyboard::Space) {
+        running = !running;
+      }
+
+      if (event.type == sf::Event::KeyPressed &&
+          event.key.code == sf::Keyboard::Z) {
+        if (emulator.getRegisters().f & alu::kFZ) {
+          emulator.getRegisters().f &= ~alu::kFZ;
+        } else {
+          emulator.getRegisters().f |= alu::kFZ;
+        }
+      }
+
       if (event.type == sf::Event::Closed) {
         window.close();
       }
@@ -70,17 +98,11 @@ int main(int argc, char **argv) {
     ImGui::SFML::Update(window, deltaClock.restart());
 
     if (running) {
-      while (true) {
-        emulator.nextTicks();
-        if (emulator.getRegisters().pc == 0x000c) {
-          running = false;
-          break;
-        }
+      emulator.nextFrame();
+      if (emulator.getRegisters().pc == 0x027e) {
+        running = false;
       }
-      // emulator.nextFrame();
     }
-
-    ImGui::SFML::Update(window, deltaClock.restart());
 
     ImGui::Begin("Debugger");
 
@@ -134,12 +156,40 @@ int main(int argc, char **argv) {
       addr += op.at("length").get<int>();
     }
 
+    s64 epoch = static_cast<s64>(time(nullptr));
+    if (epoch == currentSecond) {
+      frameCounter += 1;
+    } else {
+      currentSecond = epoch;
+      lastFrameCount = frameCounter;
+      frameCounter = 0;
+    }
+
+    ImGui::Text("fps: %d", lastFrameCount);
+
     ImGui::End();
 
     window.clear();
     emulator.render(window);
     ImGui::SFML::Render(window);
     window.display();
+
+    auto now = high_resolution_clock::now();
+    auto duty = duration_cast<nanoseconds>(now - lastTs);
+
+    if ((duty + oversleep) < kNanosPerFrame) {
+      auto delay = kNanosPerFrame - duty - oversleep;
+      std::this_thread::sleep_for(nanoseconds(delay));
+
+      // store oversleep to compesate for it on frame sync
+      oversleep =
+          duration_cast<nanoseconds>(high_resolution_clock::now() - now) -
+          delay;
+    } else {
+      oversleep = nanoseconds(0);
+    }
+
+    lastTs = high_resolution_clock::now();
   }
 
   ImGui::SFML::Shutdown();

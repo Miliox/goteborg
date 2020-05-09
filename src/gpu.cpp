@@ -31,41 +31,41 @@ static const u8 kReadObjectAttributeMemoryScanline = 153;
 
 namespace Mode
 {
-static const u8 kHorizontalBlank = 0;
-static const u8 kVerticalBlank = 1;
-static const u8 kReadOAM = 2;
-static const u8 kWriteToVRAM = 3;
+  static const u8 kHorizontalBlank = 0;
+  static const u8 kVerticalBlank = 1;
+  static const u8 kReadOAM = 2;
+  static const u8 kWriteToVRAM = 3;
 } // namespace Mode
 
 namespace Duration
 {
-static const ticks_t kHorizontalBlank = 204;
-static const ticks_t kVerticalBlank = 456;
-static const ticks_t kReadOAM = 80;
-static const ticks_t kWriteToVRAM = 172;
+  static const ticks_t kHorizontalBlank = 204;
+  static const ticks_t kVerticalBlank = 456;
+  static const ticks_t kReadOAM = 80;
+  static const ticks_t kWriteToVRAM = 172;
 } // namespace Duration
 
 namespace ControlFlags
 {
-static const u8 kDisplayEnable = 1 << 7;
-static const u8 kWindowTileMapDisplaySelect = 1 << 6;
-static const u8 kWindowDisplayEnable = 1 << 5;
-static const u8 kBackgroundWindowTileDataSelect = 1 << 4;
-static const u8 kBackgroundTileMapDisplaySelect = 1 << 3;
-static const u8 kSpriteSizeSelect = 1 << 2;
-static const u8 kSpriteDisplayEnable = 1 << 1;
-static const u8 kBackgroundDisplayEnable = 1 << 0;
+  static const u8 kDisplayEnable = 1 << 7;
+  static const u8 kWindowTileMapDisplaySelect = 1 << 6;
+  static const u8 kWindowDisplayEnable = 1 << 5;
+  static const u8 kBackgroundWindowTileDataSelect = 1 << 4;
+  static const u8 kBackgroundTileMapDisplaySelect = 1 << 3;
+  static const u8 kSpriteSizeSelect = 1 << 2;
+  static const u8 kSpriteDisplayEnable = 1 << 1;
+  static const u8 kBackgroundDisplayEnable = 1 << 0;
 }; // namespace ControlFlags
 
 namespace StatusFlags
 {
-static const u8 kInterruptOnScanlineCoincidence = 1 << 6;
-static const u8 kInterruptOnReadOAM = 1 << 5;
-static const u8 kInterruptOnVerticalBlanking = 1 << 4;
-static const u8 kScanlineCoincidenceFlag = 1 << 3;
-static const u8 kInterruptOnHorizontalBlanking = 1 << 2;
+  static const u8 kInterruptOnScanlineCoincidence = 1 << 6;
+  static const u8 kInterruptOnReadOAM = 1 << 5;
+  static const u8 kInterruptOnVerticalBlanking = 1 << 4;
+  static const u8 kScanlineCoincidenceFlag = 1 << 3;
+  static const u8 kInterruptOnHorizontalBlanking = 1 << 2;
 
-static const u8 kModeMask = 0x3;
+  static const u8 kModeMask = 0x3;
 } // namespace StatusFlags
 
 Gpu::Gpu(MMU &mmu)
@@ -391,4 +391,45 @@ void Gpu::renderScanlineSprites(u8 scanline)
   UNUSED(ControlFlags::kSpriteDisplayEnable);
   UNUSED(ControlFlags::kSpriteDisplayEnable);
   UNUSED(ControlFlags::kSpriteSizeSelect);
+
+  const u8 control = mmu_.read(Address::HwIoLcdControl);
+
+  bool is8x16 = control & ControlFlags::kSpriteSizeSelect;
+  const u8 spriteSizeWidth = 8;
+  const u8 spriteSizeHeight = is8x16 ? 16 : 8;
+
+  const addr_t spriteInfoBaseAddr = 0xfe00;
+  const u8 spriteInfoCount = 40;
+
+  const u8 spriteInfoYIndex = 0;
+  const u8 spriteInfoXIndex = 1;
+  //const u8 spriteInfoTileIndex = 2;
+  //const u8 spriteInfoFlagsIndex = 3;
+  const u8 spriteInfoSize = 4;
+
+  std::vector<u8> spriteIndexes;
+  for (size_t i = 0; i < spriteInfoCount; i++)
+  {
+    const addr_t addr = spriteInfoBaseAddr + (i * spriteInfoSize);
+
+    const u8 y = mmu_.read(addr + spriteInfoYIndex);
+    const u8 x = mmu_.read(addr + spriteInfoXIndex);
+
+    if (x == 0 || x >= (160 + spriteSizeWidth) || y == 0 || y >= (144 + 16))
+    {
+      continue;
+    }
+
+    if ((y - 16) > scanline || (y - 16 + spriteSizeHeight) <= scanline)
+    {
+      continue;
+    }
+
+    spriteIndexes.push_back(i);
+
+    if (spriteIndexes.size() >= 10)
+    {
+      break;
+    }
+  }
 }

@@ -15,11 +15,13 @@
 
 #include "common.hpp"
 
-namespace gbg {
+namespace gbg
+{
 
 class MMU;
 
-class Gpu {
+class Gpu
+{
 public:
   Gpu(MMU &mmu);
 
@@ -54,6 +56,7 @@ private:
   u8 getScanline();
   void setScanline(u8 scanline);
 
+  void renderScanline();
   void clearScanline(u8 scanline);
   void renderScanlineBackground(u8 scanline);
   void renderScanlineSprites(u8 scanline);

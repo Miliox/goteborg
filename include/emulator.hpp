@@ -11,8 +11,8 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 #include "common.hpp"
+#include "cpu.hpp"
 #include "gpu.hpp"
-#include "lr35902.hpp"
 #include "mmuimpl.hpp"
 #include "registers.hpp"
 
@@ -34,7 +34,7 @@ public:
 private:
   MMUImpl mmu_;
   Gpu gpu_;
-  LR35902 cpu_;
+  Cpu cpu_;
 
   ticks_t counter_;
   const ticks_t frameDuration_;

@@ -1,12 +1,12 @@
 /*
- * lr35902.h
+ * cpu.hpp
  * Copyright (C) 2020 Emiliano Firmino <emiliano.firmino@gmail.com>
  *
  * Distributed under terms of the MIT license.
  */
 
-#ifndef LR35902_H
-#define LR35902_H
+#ifndef CPU_H
+#define CPU_H
 
 #include <iomanip>
 #include <sstream>
@@ -20,7 +20,7 @@ class MMU;
 class Registers;
 
 /**
- * SHARP LR35902 (Gameboy CPU)
+ * SHARP Cpu (Gameboy CPU)
  *
  * A simpler Zilog Z80.
  *
@@ -28,9 +28,9 @@ class Registers;
  * but contains only the Intel 8080 registers.
  *
  */
-class LR35902 {
+class Cpu {
 public:
-  LR35902(MMU &mmu);
+  Cpu(MMU &mmu);
 
   /**
    * Registers
@@ -48,7 +48,7 @@ public:
   ticks_t cycle();
 
 private:
-  std::vector<ticks_t (LR35902::*)()> iset_;
+  std::vector<ticks_t (Cpu::*)()> iset_;
 
   void call(addr_t a);
   void ret();
@@ -625,4 +625,4 @@ private:
 
 } // namespace gbg
 
-#endif /* !LR35902_H */
+#endif /* !CPU_H */

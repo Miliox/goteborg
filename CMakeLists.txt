@@ -16,18 +16,18 @@ set(SOURCE
     include/address.hpp
     include/alu.hpp
     include/common.hpp
+    include/cpu.hpp
     include/emulator.hpp
     include/gpu.hpp
     include/interrupt.hpp
-    include/lr35902.hpp
     include/main.hpp
     include/mmu.hpp
     include/mmuimpl.hpp
     include/registers.hpp
 
     src/alu.cpp
+    src/cpu.cpp
     src/gpu.cpp
-    src/lr35902.cpp
     src/mmuimpl.cpp
     src/emulator.cpp
 )

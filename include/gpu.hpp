@@ -15,15 +15,13 @@
 
 #include "common.hpp"
 
-namespace gbg
-{
+namespace gbg {
 
-class MMU;
+class MMUImpl;
 
-class Gpu
-{
+class Gpu {
 public:
-  Gpu(MMU &mmu);
+  Gpu(MMUImpl &mmu);
 
   void render(sf::RenderTarget &renderer);
   void step(ticks_t elapsedTicks);
@@ -37,7 +35,7 @@ private:
   static const size_t kColorComponentAlpha = 3;
   static const size_t kColorComponentSize = 4;
 
-  MMU &mmu_;
+  MMUImpl &mmu_;
 
   u8 mode_;
   u8 scanline_;

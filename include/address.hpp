@@ -48,12 +48,12 @@ enum Address : addr_t {
   HwIoScrollX = 0xff43,
   HwIoCurrentScanline = 0xff44,
   HwIoComparisonScanline = 0xff45,
+  HwIoDMATransferControl = 0xff46,
   HwIoBackgroundPalette = 0xff47,
   HwIoSpritePalette0 = 0xff48,
   HwIoSpritePalette1 = 0xff49,
   HwIoWindowPositionY = 0xff4a,
   HwIoWindowPositionX = 0xff4b,
-  HwIoDMATransferControl = 0xff46,
   HwIoInterruptSwitch = 0xffff
 };
 

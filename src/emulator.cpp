@@ -17,13 +17,11 @@ Emulator::Emulator(u8 fps)
     : mmu_(), gpu_(mmu_), cpu_(mmu_), counter_(0),
       frameDuration_(kClockRate / fps) {}
 
-void Emulator::reset()
-{
+void Emulator::reset() {
   {
     sf::FileInputStream file;
 
-    if (!file.open("bios.bin"))
-    {
+    if (!file.open("bios.bin")) {
       throw std::runtime_error("error: cannot load bios");
     }
 
@@ -36,8 +34,7 @@ void Emulator::reset()
   {
     sf::FileInputStream file;
 
-    if (!file.open("cartridge.gb"))
-    {
+    if (!file.open("cartridge.gb")) {
       throw std::runtime_error("error: cannot load cartridge");
     }
 
@@ -49,12 +46,10 @@ void Emulator::reset()
 
   addr_t blogo = 0x00a8;
   addr_t clogo = 0x0104;
-  for (addr_t i = 0; i < 48; i++)
-  {
+  for (addr_t i = 0; i < 48; i++) {
     auto bdata = mmu_.read(blogo + i);
     auto cdata = mmu_.read(clogo + i);
-    if (bdata != cdata)
-    {
+    if (bdata != cdata) {
       throw std::runtime_error("error: logo mismatch");
     }
   }
@@ -66,14 +61,11 @@ Registers &Emulator::getRegisters() { return cpu_.regs; }
 
 void Emulator::render(sf::RenderTarget &renderer) { gpu_.render(renderer); }
 
-void Emulator::nextFrame()
-{
-  while (counter_ < frameDuration_)
-  {
+void Emulator::nextFrame() {
+  while (counter_ < frameDuration_) {
     auto t = cpu_.cycle();
 
-    if (t == 0)
-    {
+    if (t == 0) {
       // halt
       return;
     }
@@ -83,20 +75,17 @@ void Emulator::nextFrame()
 
     counter_ += t;
 
-    if (cpu_.regs.pc == 0x027e)
-    {
+    if (cpu_.regs.pc == 0x027e) {
       return;
     }
   }
   counter_ -= frameDuration_;
 }
 
-ticks_t Emulator::nextTicks()
-{
+ticks_t Emulator::nextTicks() {
   auto t = cpu_.cycle();
 
-  if (t == 0)
-  {
+  if (t == 0) {
     // halt
     return 0;
   }

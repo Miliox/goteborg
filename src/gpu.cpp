@@ -9,9 +9,11 @@
 
 #include "address.hpp"
 #include "interrupt.hpp"
-#include "mmu.hpp"
+#include "mmuimpl.hpp"
+#include "sprite.hpp"
 
 #include <algorithm>
+#include <deque>
 #include <sstream>
 
 using namespace gbg;
@@ -29,50 +31,45 @@ static const size_t kDisplaySize = kDisplayWidth * kDisplayHeight;
 static const u8 kVerticalBlankScanline = 143;
 static const u8 kReadObjectAttributeMemoryScanline = 153;
 
-namespace Mode
-{
-  static const u8 kHorizontalBlank = 0;
-  static const u8 kVerticalBlank = 1;
-  static const u8 kReadOAM = 2;
-  static const u8 kWriteToVRAM = 3;
+namespace Mode {
+static const u8 kHorizontalBlank = 0;
+static const u8 kVerticalBlank = 1;
+static const u8 kReadOAM = 2;
+static const u8 kWriteToVRAM = 3;
 } // namespace Mode
 
-namespace Duration
-{
-  static const ticks_t kHorizontalBlank = 204;
-  static const ticks_t kVerticalBlank = 456;
-  static const ticks_t kReadOAM = 80;
-  static const ticks_t kWriteToVRAM = 172;
+namespace Duration {
+static const ticks_t kHorizontalBlank = 204;
+static const ticks_t kVerticalBlank = 456;
+static const ticks_t kReadOAM = 80;
+static const ticks_t kWriteToVRAM = 172;
 } // namespace Duration
 
-namespace ControlFlags
-{
-  static const u8 kDisplayEnable = 1 << 7;
-  static const u8 kWindowTileMapDisplaySelect = 1 << 6;
-  static const u8 kWindowDisplayEnable = 1 << 5;
-  static const u8 kBackgroundWindowTileDataSelect = 1 << 4;
-  static const u8 kBackgroundTileMapDisplaySelect = 1 << 3;
-  static const u8 kSpriteSizeSelect = 1 << 2;
-  static const u8 kSpriteDisplayEnable = 1 << 1;
-  static const u8 kBackgroundDisplayEnable = 1 << 0;
+namespace ControlFlags {
+static const u8 kDisplayEnable = 1 << 7;
+static const u8 kWindowTileMapDisplaySelect = 1 << 6;
+static const u8 kWindowDisplayEnable = 1 << 5;
+static const u8 kBackgroundWindowTileDataSelect = 1 << 4;
+static const u8 kBackgroundTileMapDisplaySelect = 1 << 3;
+static const u8 kSpriteSizeSelect = 1 << 2;
+static const u8 kSpriteDisplayEnable = 1 << 1;
+static const u8 kBackgroundDisplayEnable = 1 << 0;
 }; // namespace ControlFlags
 
-namespace StatusFlags
-{
-  static const u8 kInterruptOnScanlineCoincidence = 1 << 6;
-  static const u8 kInterruptOnReadOAM = 1 << 5;
-  static const u8 kInterruptOnVerticalBlanking = 1 << 4;
-  static const u8 kScanlineCoincidenceFlag = 1 << 3;
-  static const u8 kInterruptOnHorizontalBlanking = 1 << 2;
+namespace StatusFlags {
+static const u8 kInterruptOnScanlineCoincidence = 1 << 6;
+static const u8 kInterruptOnReadOAM = 1 << 5;
+static const u8 kInterruptOnVerticalBlanking = 1 << 4;
+static const u8 kScanlineCoincidenceFlag = 1 << 3;
+static const u8 kInterruptOnHorizontalBlanking = 1 << 2;
 
-  static const u8 kModeMask = 0x3;
+static const u8 kModeMask = 0x3;
 } // namespace StatusFlags
 
-Gpu::Gpu(MMU &mmu)
+Gpu::Gpu(MMUImpl &mmu)
     : mmu_(mmu), mode_(Mode::kVerticalBlank), scanline_(0), counter_(0),
       palette_(), pixels_(kDisplaySize * kColorComponentSize, 0), texture_(),
-      viewport_()
-{
+      viewport_() {
 
   // #9BBC0FFF (RGBA)
   palette_[0][0] = 0x9B;
@@ -98,8 +95,7 @@ Gpu::Gpu(MMU &mmu)
   palette_[3][2] = 0x0F;
   palette_[3][3] = 0xFF;
 
-  for (u8 line = 0; line < kDisplayHeight; line++)
-  {
+  for (u8 line = 0; line < kDisplayHeight; line++) {
     clearScanline(line);
   }
 
@@ -118,60 +114,50 @@ Gpu::Gpu(MMU &mmu)
   mmu_.write(Address::HwIoLcdControl, 0);
 }
 
-void Gpu::step(ticks_t t)
-{
+void Gpu::step(ticks_t t) {
   counter_ += t;
 
-  switch (getMode())
-  {
+  switch (getMode()) {
   case Mode::kHorizontalBlank:
-    if (counter_ >= Duration::kHorizontalBlank)
-    {
+    if (counter_ >= Duration::kHorizontalBlank) {
       counter_ -= Duration::kHorizontalBlank;
 
       auto scanline = getScanline();
       scanline += 1;
       setScanline(scanline);
 
-      if (scanline >= kVerticalBlankScanline)
-      {
+      if (scanline >= kVerticalBlankScanline) {
         setMode(Mode::kVerticalBlank);
 
         renderScanline();
         texture_->update(pixels_.data());
-      }
-      else
-      {
+      } else {
         setMode(Mode::kReadOAM);
       }
     }
     break;
   case Mode::kVerticalBlank:
-    if (counter_ >= Duration::kVerticalBlank)
-    {
+    if (counter_ >= Duration::kVerticalBlank) {
       counter_ -= Duration::kVerticalBlank;
 
       auto scanline = getScanline();
       scanline += 1;
       setScanline(scanline);
 
-      if (scanline > kReadObjectAttributeMemoryScanline)
-      {
+      if (scanline > kReadObjectAttributeMemoryScanline) {
         setMode(Mode::kReadOAM);
         setScanline(0);
       }
     }
     break;
   case Mode::kReadOAM:
-    if (counter_ >= Duration::kReadOAM)
-    {
+    if (counter_ >= Duration::kReadOAM) {
       counter_ -= Duration::kReadOAM;
       setMode(Mode::kWriteToVRAM);
     }
     break;
   case Mode::kWriteToVRAM:
-    if (counter_ >= Duration::kWriteToVRAM)
-    {
+    if (counter_ >= Duration::kWriteToVRAM) {
       counter_ -= Duration::kWriteToVRAM;
       setMode(Mode::kHorizontalBlank);
       renderScanline();
@@ -184,29 +170,22 @@ void Gpu::render(sf::RenderTarget &renderer) { renderer.draw(*viewport_); }
 
 u8 Gpu::getMode() { return (mmu_.read(Address::HwIoLcdStatus) & 0x3); }
 
-void Gpu::setMode(u8 mode)
-{
+void Gpu::setMode(u8 mode) {
   u8 status = mmu_.read(Address::HwIoLcdStatus);
-  if (mode == Mode::kVerticalBlank)
-  {
+  if (mode == Mode::kVerticalBlank) {
     auto flags = mmu_.read(Address::HwIoInterruptFlags);
     flags |= kLcdVerticalBlankingInterrupt;
-    if (status & StatusFlags::kInterruptOnVerticalBlanking)
-    {
+    if (status & StatusFlags::kInterruptOnVerticalBlanking) {
       flags |= kLcdControllerInterrupt;
     }
     mmu_.write(Address::HwIoInterruptFlags, flags);
-  }
-  else if (mode == Mode::kHorizontalBlank &&
-           (status & StatusFlags::kInterruptOnHorizontalBlanking))
-  {
+  } else if (mode == Mode::kHorizontalBlank &&
+             (status & StatusFlags::kInterruptOnHorizontalBlanking)) {
     auto flags = mmu_.read(Address::HwIoInterruptFlags);
     flags |= kLcdControllerInterrupt;
     mmu_.write(Address::HwIoInterruptFlags, flags);
-  }
-  else if (mode == Mode::kReadOAM &&
-           (status & StatusFlags::kInterruptOnReadOAM))
-  {
+  } else if (mode == Mode::kReadOAM &&
+             (status & StatusFlags::kInterruptOnReadOAM)) {
     auto flags = mmu_.read(Address::HwIoInterruptFlags);
     flags |= kLcdControllerInterrupt;
     mmu_.write(Address::HwIoInterruptFlags, flags);
@@ -216,35 +195,28 @@ void Gpu::setMode(u8 mode)
   mmu_.write(Address::HwIoLcdStatus, status);
 }
 
-u8 Gpu::getScanline()
-{
+u8 Gpu::getScanline() {
   auto scanline = mmu_.read(Address::HwIoCurrentScanline);
-  if (scanline_ != scanline)
-  {
+  if (scanline_ != scanline) {
     scanline = 0;
     scanline_ = 0;
   }
   return scanline;
 }
 
-void Gpu::setScanline(u8 scanline)
-{
+void Gpu::setScanline(u8 scanline) {
   scanline_ = scanline;
 
   auto status = mmu_.read(Address::HwIoLcdStatus);
   auto comparisonScanline = mmu_.read(Address::HwIoComparisonScanline);
 
-  if (scanline == comparisonScanline)
-  {
+  if (scanline == comparisonScanline) {
     status |= StatusFlags::kScanlineCoincidenceFlag;
-  }
-  else
-  {
+  } else {
     status &= ~StatusFlags::kScanlineCoincidenceFlag;
   }
 
-  if (status & StatusFlags::kInterruptOnScanlineCoincidence)
-  {
+  if (status & StatusFlags::kInterruptOnScanlineCoincidence) {
     mmu_.write(Address::HwIoInterruptFlags,
                mmu_.read(Address::HwIoInterruptFlags) |
                    kLcdControllerInterrupt);
@@ -254,56 +226,44 @@ void Gpu::setScanline(u8 scanline)
   mmu_.write(Address::HwIoLcdStatus, status);
 }
 
-void Gpu::clearScanline(u8 scanline)
-{
+void Gpu::clearScanline(u8 scanline) {
   size_t begin = scanline * kDisplayWidth * kColorComponentSize;
   size_t end = begin + kDisplayWidth * kColorComponentSize;
-  for (size_t i = begin; i < end; i += kColorComponentSize)
-  {
-    for (size_t j = 0; j < kColorComponentSize; j++)
-    {
+  for (size_t i = begin; i < end; i += kColorComponentSize) {
+    for (size_t j = 0; j < kColorComponentSize; j++) {
       pixels_[i + j] = palette_[0][j];
     }
   }
 }
 
-bool Gpu::isBackgroundEnable()
-{
+bool Gpu::isBackgroundEnable() {
   return mmu_.read(Address::HwIoLcdControl) &
          ControlFlags::kBackgroundDisplayEnable;
 }
 
-addr_t Gpu::getTileDataIndex(u8 line, u8 index)
-{
+addr_t Gpu::getTileDataIndex(u8 line, u8 index) {
   u8 dataIndex = (line % kTileHeight) * 2;
 
-  if (index < 128 || getTileDataAddr() == 0x8000)
-  {
+  if (index < 128 || getTileDataAddr() == 0x8000) {
     dataIndex += index * kTileSize;
-  }
-  else
-  {
+  } else {
     dataIndex -= (static_cast<s8>(index) * kTileSize) * -1;
   }
 
   return dataIndex;
 }
 
-addr_t Gpu::getTileDataAddr()
-{
+addr_t Gpu::getTileDataAddr() {
   const u8 control = mmu_.read(Address::HwIoLcdControl);
-  if (control & ControlFlags::kBackgroundWindowTileDataSelect)
-  {
+  if (control & ControlFlags::kBackgroundWindowTileDataSelect) {
     return 0x8000;
   }
   return 0x9000;
 }
 
-addr_t Gpu::getTileMapAddr()
-{
+addr_t Gpu::getTileMapAddr() {
   const u8 control = mmu_.read(Address::HwIoLcdControl);
-  if (control & ControlFlags::kBackgroundTileMapDisplaySelect)
-  {
+  if (control & ControlFlags::kBackgroundTileMapDisplaySelect) {
     return 0x9C00;
   }
   return 0x9800;
@@ -313,26 +273,22 @@ addr_t Gpu::getScrollX() { return mmu_.read(Address::HwIoScrollX); }
 
 addr_t Gpu::getScrollY() { return mmu_.read(Address::HwIoScrollY); }
 
-addr_t Gpu::getWindowTileIndex(u8 windowX, u8 windowY)
-{
+addr_t Gpu::getWindowTileIndex(u8 windowX, u8 windowY) {
   addr_t windowTileIndex = 0;
   windowTileIndex += static_cast<addr_t>(windowX / kTileWidth);
   windowTileIndex += static_cast<addr_t>(windowY / kTileHeight) * kTilesPerRow;
   return windowTileIndex;
 }
 
-void Gpu::renderScanline()
-{
+void Gpu::renderScanline() {
   auto scanline = getScanline();
   clearScanline(scanline);
   renderScanlineBackground(scanline);
   renderScanlineSprites(scanline);
 }
 
-void Gpu::renderScanlineBackground(u8 scanline)
-{
-  if (!isBackgroundEnable())
-  {
+void Gpu::renderScanlineBackground(u8 scanline) {
+  if (!isBackgroundEnable()) {
     return;
   }
 
@@ -343,21 +299,18 @@ void Gpu::renderScanlineBackground(u8 scanline)
   const addr_t mapAddr = getTileMapAddr();
 
   const u8 windowY = scanline + scrollY;
-  for (size_t column = 0; column < kDisplayWidth; column++)
-  {
+  for (size_t column = 0; column < kDisplayWidth; column++) {
     const u8 windowX = column + scrollX;
 
-    addr_t bgIndex = (windowY / kTileHeight) * kTilesPerRow + (windowX / kTileWidth);
+    addr_t bgIndex =
+        (windowY / kTileHeight) * kTilesPerRow + (windowX / kTileWidth);
     addr_t tileIndex = mmu_.read(mapAddr + bgIndex);
 
     addr_t tileAddr = dataAddr;
-    if (dataAddr == 0x9000 && tileIndex >= 128)
-    {
+    if (dataAddr == 0x9000 && tileIndex >= 128) {
       tileIndex = (0xff - tileIndex) + 1;
       tileAddr -= (tileIndex * 16);
-    }
-    else
-    {
+    } else {
       tileAddr += (tileIndex * 16);
     }
     tileAddr += (windowY % kTileHeight) * 2;
@@ -370,18 +323,17 @@ void Gpu::renderScanlineBackground(u8 scanline)
     palleteIndex += ((lsb >> bitIndex) & 0x01) ? 2 : 0;
     palleteIndex += ((msb >> bitIndex) & 0x01) ? 1 : 0;
 
-    palleteIndex = (mmu_.read(Address::HwIoBackgroundPalette) >> (palleteIndex * 2)) & 0x3;
+    palleteIndex =
+        (mmu_.read(Address::HwIoBackgroundPalette) >> (palleteIndex * 2)) & 0x3;
 
     int pos = (column + (scanline * kDisplayWidth)) * kColorComponentSize;
-    for (size_t i = 0; i < kColorComponentSize; i++)
-    {
+    for (size_t i = 0; i < kColorComponentSize; i++) {
       pixels_.at(pos + i) = palette_[palleteIndex][i];
     }
   }
 }
 
-void Gpu::renderScanlineSprites(u8 scanline)
-{
+void Gpu::renderScanlineSprites(u8 scanline) {
   UNUSED(scanline);
   UNUSED(kTileSize);
   UNUSED(kTilesPerColumn);
@@ -395,41 +347,80 @@ void Gpu::renderScanlineSprites(u8 scanline)
   const u8 control = mmu_.read(Address::HwIoLcdControl);
 
   bool is8x16 = control & ControlFlags::kSpriteSizeSelect;
-  const u8 spriteSizeWidth = 8;
-  const u8 spriteSizeHeight = is8x16 ? 16 : 8;
+  const u8 width = 8;
+  const u8 height = is8x16 ? 16 : 8;
 
-  const addr_t spriteInfoBaseAddr = 0xfe00;
-  const u8 spriteInfoCount = 40;
+  auto oam = mmu_.getOAM();
+  Sprite *allSprites = reinterpret_cast<Sprite *>(oam.data());
+  auto count = oam.size() / sizeof(Sprite);
 
-  const u8 spriteInfoYIndex = 0;
-  const u8 spriteInfoXIndex = 1;
-  //const u8 spriteInfoTileIndex = 2;
-  //const u8 spriteInfoFlagsIndex = 3;
-  const u8 spriteInfoSize = 4;
+  std::deque<Sprite *> visibleSprites;
+  for (size_t i = 0; i < count; i++) {
+    Sprite *sprite = allSprites + i;
 
-  std::vector<u8> spriteIndexes;
-  for (size_t i = 0; i < spriteInfoCount; i++)
-  {
-    const addr_t addr = spriteInfoBaseAddr + (i * spriteInfoSize);
-
-    const u8 y = mmu_.read(addr + spriteInfoYIndex);
-    const u8 x = mmu_.read(addr + spriteInfoXIndex);
-
-    if (x == 0 || x >= (160 + spriteSizeWidth) || y == 0 || y >= (144 + 16))
-    {
+    if (sprite->x == 0 || sprite->x >= (160 + width) || sprite->y == 0 ||
+        sprite->y >= (144 + 16)) {
       continue;
     }
 
-    if ((y - 16) > scanline || (y - 16 + spriteSizeHeight) <= scanline)
-    {
+    if ((sprite->screenY() > scanline) ||
+        (sprite->screenY() + height) <= scanline) {
       continue;
     }
 
-    spriteIndexes.push_back(i);
+    if (sprite->hasPriority()) {
+      visibleSprites.push_front(sprite);
+    } else {
+      visibleSprites.push_back(sprite);
+    }
+  }
 
-    if (spriteIndexes.size() >= 10)
-    {
-      break;
+  if (visibleSprites.size() > 10) {
+    visibleSprites.resize(10);
+  }
+
+  const uint16_t kSpriteTileSize = 16;
+  const uint16_t kSpriteTileLineSize = 2;
+  const uint16_t kSpriteTileAddress = 0x8000;
+
+  for (auto &sprite : visibleSprites) {
+    addr_t tileNumber = is8x16 ? (sprite->tile & 0xfe) : sprite->tile;
+    addr_t tileAddress = kSpriteTileAddress + (tileNumber * kSpriteTileSize);
+    addr_t tileLine = scanline - sprite->screenY();
+
+    if (sprite->isFlipY()) {
+      tileLine = (height - 1) - tileLine;
+    }
+
+    addr_t tileLineAddress = tileAddress + (tileLine * kSpriteTileLineSize);
+
+    u8 lsb = mmu_.read(tileLineAddress);
+    u8 msb = mmu_.read(tileLineAddress + 1);
+
+    u8 spritePallete =
+        mmu_.read(sprite->isPalette1() ? Address::HwIoSpritePalette1
+                                       : Address::HwIoSpritePalette0);
+
+    for (size_t i = 0; i < width; i++) {
+      if ((sprite->x + i) < width || (sprite->screenX() + i) >= kDisplayWidth) {
+        // Pixel not visible
+        continue;
+      }
+
+      int bitIndex = sprite->isFlipX() ? i : (7 - i);
+
+      int spritePaletteIndex = 0;
+      spritePaletteIndex += ((lsb >> bitIndex) & 0x01) ? 2 : 0;
+      spritePaletteIndex += ((msb >> bitIndex) & 0x01) ? 1 : 0;
+
+      int palleteIndex = (spritePallete >> (spritePaletteIndex * 2)) & 0x3;
+
+      int column = sprite->screenX() + i;
+
+      int pos = (column + (scanline * kDisplayWidth)) * kColorComponentSize;
+      for (size_t i = 0; i < kColorComponentSize; i++) {
+        pixels_.at(pos + i) = palette_[palleteIndex][i];
+      }
     }
   }
 }

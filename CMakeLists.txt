@@ -24,6 +24,7 @@ set(SOURCE
     include/mmu.hpp
     include/mmuimpl.hpp
     include/registers.hpp
+    include/sprite.hpp
 
     src/alu.cpp
     src/cpu.cpp

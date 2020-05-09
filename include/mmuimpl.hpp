@@ -27,6 +27,8 @@ public:
   void loadBios(const buffer_t &bios);
   void loadCartridge(const buffer_t &rom);
 
+  buffer_t &getOAM();
+
 private:
   buffer_t bios_; // bios
   buffer_t crom_; // cartridge rom

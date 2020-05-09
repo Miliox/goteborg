@@ -16,8 +16,7 @@
 
 using namespace gbg;
 
-namespace MemAddr
-{
+namespace MemAddr {
 static const addr_t kBiosROM = 0x0000;
 static const addr_t kCartridgeROM = 0x0000;
 static const addr_t kVideoRAM = 0x8000;
@@ -30,8 +29,7 @@ static const addr_t kHwIO = 0xFF00;
 static const addr_t kHighRAM = 0xFF80;
 } // namespace MemAddr
 
-namespace MemSize
-{
+namespace MemSize {
 static const size_t kBiosROM = 0x0100;
 static const size_t kCartridgeROM = 0x8000;
 static const size_t kVideoRAM = 0x2000;
@@ -71,99 +69,84 @@ MMUImpl::MMUImpl()
       oram_(MemSize::kOamRAM, 0xff), hwio_(MemSize::kHwIO, 0),
       hram_(MemSize::kHighRAM, 0xff), timer_(0), divider_(0) {}
 
-void MMUImpl::loadBios(const buffer_t &bios)
-{
-  if (bios.size() != 256)
-  {
+void MMUImpl::loadBios(const buffer_t &bios) {
+  if (bios.size() != 256) {
     throw std::runtime_error("bios must be 256 bytes long");
   }
 
   bios_ = bios;
 }
 
-void MMUImpl::loadCartridge(const buffer_t &rom)
-{
+void MMUImpl::loadCartridge(const buffer_t &rom) {
   auto result = div(rom.size(), 32 * 1024);
-  if (rom.size() == 0 && result.rem != 0)
-  {
+  if (rom.size() == 0 && result.rem != 0) {
     throw std::runtime_error("cartridge rom must be multiple of 32Kb");
   }
   crom_ = rom;
 }
 
-u8 MMUImpl::read(addr_t src)
-{
-  if (src < (MemAddr::kBiosROM + MemSize::kBiosROM) && hwio_.at(0x50) != 1)
-  {
+u8 MMUImpl::read(addr_t src) {
+  if (src < (MemAddr::kBiosROM + MemSize::kBiosROM) && hwio_.at(0x50) != 1) {
     src -= MemAddr::kBiosROM;
     return bios_.at(src);
   }
 
   static_assert(MemSize::kCartridgeRAM < MemAddr::kVideoRAM);
 
-  if (src < (MemAddr::kCartridgeROM + MemSize::kCartridgeROM))
-  {
+  if (src < (MemAddr::kCartridgeROM + MemSize::kCartridgeROM)) {
     src -= MemAddr::kCartridgeROM;
     return crom_.at(src);
   }
 
   static_assert(MemSize::kVideoRAM < MemAddr::kCartridgeRAM);
 
-  if (src < (MemAddr::kVideoRAM + MemSize::kVideoRAM))
-  {
+  if (src < (MemAddr::kVideoRAM + MemSize::kVideoRAM)) {
     src -= MemAddr::kVideoRAM;
     return vram_.at(src);
   }
 
   static_assert(MemAddr::kCartridgeRAM < MemAddr::kLowRAM);
 
-  if (src < (MemAddr::kCartridgeRAM + MemSize::kCartridgeRAM))
-  {
+  if (src < (MemAddr::kCartridgeRAM + MemSize::kCartridgeRAM)) {
     src -= MemAddr::kCartridgeRAM;
     return cram_.at(src);
   }
 
   static_assert(MemAddr::kLowRAM < MemAddr::kEchoRAM);
 
-  if (src < (MemAddr::kLowRAM + MemSize::kLowRAM))
-  {
+  if (src < (MemAddr::kLowRAM + MemSize::kLowRAM)) {
     src -= MemAddr::kLowRAM;
     return lram_.at(src);
   }
 
   static_assert(MemAddr::kEchoRAM < MemAddr::kOamRAM);
 
-  if (src < (MemAddr::kEchoRAM + MemSize::kEchoRAM))
-  {
+  if (src < (MemAddr::kEchoRAM + MemSize::kEchoRAM)) {
     src -= MemAddr::kEchoRAM;
     return lram_.at(src);
   }
 
   static_assert(MemAddr::kOamRAM < MemAddr::kInvRAM);
 
-  if (src < (MemAddr::kOamRAM + MemSize::kOamRAM))
-  {
+  if (src < (MemAddr::kOamRAM + MemSize::kOamRAM)) {
     src -= MemAddr::kOamRAM;
     return oram_.at(src);
   }
 
   static_assert(MemAddr::kInvRAM < MemAddr::kHwIO);
 
-  if (src < (MemAddr::kInvRAM + MemSize::kInvRAM))
-  {
+  if (src < (MemAddr::kInvRAM + MemSize::kInvRAM)) {
     return 0x00;
   }
 
   static_assert(MemAddr::kHwIO < MemAddr::kHighRAM);
 
-  if (src < (MemAddr::kHwIO + MemSize::kHwIO))
-  {
+  if (src < (MemAddr::kHwIO + MemSize::kHwIO)) {
     src -= MemAddr::kHwIO;
     return hwio_.at(src);
   }
 
-  if (src)
-  {
+  if (src) {
     src -= MemAddr::kHighRAM;
     return hram_.at(src);
   }
@@ -190,14 +173,12 @@ static const u8 kHwIoIndexInterruptFlag = 0x0f;
 static const u8 kTimerControlStartFlag = 0x04;
 static const u8 kTimerControlClockSelectMask = 0x03;
 
-void MMUImpl::step(ticks_t ticks)
-{
+void MMUImpl::step(ticks_t ticks) {
   // Todo: DMA
 
   // Divider
   divider_ += ticks;
-  if (divider_ >= kDividerDuration)
-  {
+  if (divider_ >= kDividerDuration) {
     divider_ -= kDividerDuration;
     hwio_.at(kHwIoIndexTimerDivider) += 1;
   }
@@ -205,53 +186,43 @@ void MMUImpl::step(ticks_t ticks)
   // Timer
   u8 timerControl = hwio_.at(kHwIoIndexTimerControl);
   u8 timerRunning = timerControl & kTimerControlStartFlag;
-  if (timerRunning)
-  {
+  if (timerRunning) {
     u8 clockSelect = timerControl & kTimerControlClockSelectMask;
 
     timer_ += ticks;
-    if (timer_ >= kTimerDuration[clockSelect])
-    {
+    if (timer_ >= kTimerDuration[clockSelect]) {
       timer_ -= kTimerDuration[clockSelect];
       hwio_.at(kHwIoIndexTimerCounter) += 1;
 
-      if (hwio_.at(kHwIoIndexTimerCounter) == 0)
-      {
+      if (hwio_.at(kHwIoIndexTimerCounter) == 0) {
         hwio_.at(kHwIoIndexInterruptFlag) |= kTimerOverflowInterrupt;
         hwio_.at(kHwIoIndexTimerCounter) = hwio_.at(kHwIoIndexTimerModulo);
       }
     }
-  }
-  else
-  {
+  } else {
     timer_ = 0;
   }
 }
 
-void MMUImpl::transfer(addr_t dst, addr_t src)
-{
+void MMUImpl::transfer(addr_t dst, addr_t src) {
   std::cout << "dma: src=" << std::hex << static_cast<u32>(src)
             << " dst=" << static_cast<u32>(dst) << "\n";
-  for (addr_t i = 0; i < 160; i++)
-  {
+  for (addr_t i = 0; i < 160; i++) {
     write(dst + i, read(src + i));
   }
 }
 
-void MMUImpl::write(addr_t dst, u8 value)
-{
+void MMUImpl::write(addr_t dst, u8 value) {
   static_assert(MemSize::kCartridgeRAM < MemAddr::kVideoRAM);
 
-  if (dst < (MemAddr::kCartridgeROM + MemSize::kCartridgeROM))
-  {
+  if (dst < (MemAddr::kCartridgeROM + MemSize::kCartridgeROM)) {
     // read only
     return;
   }
 
   static_assert(MemSize::kVideoRAM < MemAddr::kCartridgeRAM);
 
-  if (dst < (MemAddr::kVideoRAM + MemSize::kVideoRAM))
-  {
+  if (dst < (MemAddr::kVideoRAM + MemSize::kVideoRAM)) {
     dst -= MemAddr::kVideoRAM;
     vram_.at(dst) = value;
     return;
@@ -259,8 +230,7 @@ void MMUImpl::write(addr_t dst, u8 value)
 
   static_assert(MemAddr::kCartridgeRAM < MemAddr::kLowRAM);
 
-  if (dst < (MemAddr::kCartridgeRAM + MemSize::kCartridgeRAM))
-  {
+  if (dst < (MemAddr::kCartridgeRAM + MemSize::kCartridgeRAM)) {
     dst -= MemAddr::kCartridgeRAM;
     cram_.at(dst) = value;
     return;
@@ -268,8 +238,7 @@ void MMUImpl::write(addr_t dst, u8 value)
 
   static_assert(MemAddr::kLowRAM < MemAddr::kEchoRAM);
 
-  if (dst < (MemAddr::kLowRAM + MemSize::kLowRAM))
-  {
+  if (dst < (MemAddr::kLowRAM + MemSize::kLowRAM)) {
     dst -= MemAddr::kLowRAM;
     lram_.at(dst) = value;
     return;
@@ -277,8 +246,7 @@ void MMUImpl::write(addr_t dst, u8 value)
 
   static_assert(MemAddr::kEchoRAM < MemAddr::kOamRAM);
 
-  if (dst < (MemAddr::kEchoRAM + MemSize::kEchoRAM))
-  {
+  if (dst < (MemAddr::kEchoRAM + MemSize::kEchoRAM)) {
     dst -= MemAddr::kEchoRAM;
     lram_.at(dst) = value;
     return;
@@ -286,8 +254,7 @@ void MMUImpl::write(addr_t dst, u8 value)
 
   static_assert(MemAddr::kOamRAM < MemAddr::kInvRAM);
 
-  if (dst < (MemAddr::kOamRAM + MemSize::kOamRAM))
-  {
+  if (dst < (MemAddr::kOamRAM + MemSize::kOamRAM)) {
     dst -= MemAddr::kOamRAM;
     oram_.at(dst) = value;
     return;
@@ -295,26 +262,22 @@ void MMUImpl::write(addr_t dst, u8 value)
 
   static_assert(MemAddr::kInvRAM < MemAddr::kHwIO);
 
-  if (dst < (MemAddr::kInvRAM + MemSize::kInvRAM))
-  {
+  if (dst < (MemAddr::kInvRAM + MemSize::kInvRAM)) {
     // read only
     return;
   }
 
   static_assert(MemAddr::kHwIO < MemAddr::kHighRAM);
 
-  if (dst < (MemAddr::kHwIO + MemSize::kHwIO))
-  {
+  if (dst < (MemAddr::kHwIO + MemSize::kHwIO)) {
     dst -= MemAddr::kHwIO;
 
-    if (dst == kHwIoIndexTimerDivider)
-    {
+    if (dst == kHwIoIndexTimerDivider) {
       hwio_.at(dst) = 0;
       return;
     }
 
-    if (dst == 0x50)
-    {
+    if (dst == 0x50) {
       std::cout << "bios write: " << static_cast<int>(value) << "\n";
     }
 
@@ -322,8 +285,7 @@ void MMUImpl::write(addr_t dst, u8 value)
     return;
   }
 
-  if (dst)
-  {
+  if (dst) {
     dst -= MemAddr::kHighRAM;
     hram_.at(dst) = value;
     return;
@@ -331,3 +293,5 @@ void MMUImpl::write(addr_t dst, u8 value)
 
   assert(false);
 }
+
+buffer_t &MMUImpl::getOAM() { return oram_; }
